@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { X } from 'phosphor-react'
+import { Check, X, Warning } from 'phosphor-react'
 import ProductCard from '../product/ProductCard'
 import { useCart } from '@/contexts/CartContext'
 import { priceFormatter } from '@/utils/formatter'
@@ -8,8 +8,8 @@ import * as RadioGroup from '@radix-ui/react-radio-group'
 import Image from 'next/image'
 import emptyCart from '@/assets/empty-cart.png'
 import AdressModel from './AdressModel'
-import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { useOrder } from '@/contexts/OrderContext'
 
 const OrdersType = z.object({
   adrees: z.object({
@@ -20,24 +20,27 @@ const OrdersType = z.object({
     complemento: z.string(),
   }),
   paymentMode: z.enum(['pix', 'credito', 'debito']),
-  productsId: z.string().array()
+  products: z
+    .object({
+      productsId: z.string(),
+      quantify: z.number(),
+    })
+    .array(),
 })
 
 type OrdersInputs = z.infer<typeof OrdersType>
 
 const CartModal = () => {
+  const { adrees } = useOrder()
+  const [isAdreesModelOpen, setIsAdreesModelOpen] = useState(false)
+
+  const setAdreesModelClose = () => {}
+
   const {
     cartProducts,
     totalOrderAmountFormatted,
     totalOrderAmountFormatterdPlusTax,
   } = useCart()
-
-  const newOrderForm = useForm<OrdersInputs>({})
-  const { handleSubmit } = newOrderForm
-
-  const confirmOrder = (data: OrdersInputs) => {
-    console.log(data)
-  }
 
   return (
     <Dialog.Portal>
@@ -68,8 +71,8 @@ const CartModal = () => {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit(confirmOrder)} className='w-full'>
-            <div className='space-y-10'>
+          <>
+            <div className='space-y-10 w-full'>
               <div className='flex items-center justify-between'>
                 <Dialog.Title className='text-2xl font-semibold'>
                   Seu carrinho
@@ -120,16 +123,31 @@ const CartModal = () => {
                     </RadioGroup.Root>
                   </div>
 
-                  <Dialog.Root>
+                  <Dialog.Root
+                    open={isAdreesModelOpen}
+                    onOpenChange={setIsAdreesModelOpen}
+                  >
                     <Dialog.Trigger asChild>
-                      <button
-                        className='py-3 px-4 rounded-lg font-bold bg-blue-800 text-white hover:bg-blue-700 
-                              transition-all disabled:opacity-25 w-full'
-                      >
-                        Enderereço de entrega
-                      </button>
+                      {adrees !== undefined ? (
+                        <button
+                          className='py-3 px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-700 
+                                    transition-all disabled:opacity-25 w-full flex items-center justify-center gap-3'
+                        >
+                          Endereço confirmado 
+                          <Check size={22} />
+                        </button>
+                      ) : (
+                        <button
+                          className='py-3 px-4 rounded-lg font-bold bg-yellow-500 text-black hover:bg-yellow-700 
+                                    transition-all disabled:opacity-25 w-full flex items-center justify-center gap-3'
+                        >
+                          Confirmar endereço
+                          <Warning size={22} />
+                        </button>
+                      )}
                     </Dialog.Trigger>
-                    <AdressModel />
+
+                    <AdressModel setIsAdreesModelOpen={setIsAdreesModelOpen} />
                   </Dialog.Root>
                 </div>
               </div>
@@ -168,7 +186,7 @@ const CartModal = () => {
                 </button>
               </div>
             </div>
-          </form>
+          </>
         )}
       </Dialog.Content>
     </Dialog.Portal>
