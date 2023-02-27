@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
-import beer from '@/assets/glasses-beer.jpg'
+import beer from '@/assets/productImages/glasses-beer.jpg'
 import { ShoppingCartSimple, Plus, Minus } from 'phosphor-react'
 import { useCart } from '@/contexts/CartContext'
 
@@ -8,33 +8,36 @@ interface ProductProps {
   id: number
   name: string
   price: number
+  imageUrl: string
 }
 
 const ProductCard = (product: ProductProps) => {
   const { cartProducts, increaseCartItem, decreaseCartItem } = useCart()
-  const { name, price, id } = product
+  const { name, price, id, imageUrl } = product
 
   const actualProduct = cartProducts.find((product) => product.productId == id)
 
   const increaseCart = (data: ProductProps) => {
-    const { id, name, price } = data
+    const { id, name, price, imageUrl } = data
 
     const productToIncrease = {
       productId: id,
       name,
       price,
+      imageUrl,
     }
 
     increaseCartItem(productToIncrease)
   }
 
   const decreaseCart = (data: ProductProps) => {
-    const { id, name, price } = data
+    const { id, name, price, imageUrl } = data
 
     const productToDecrease = {
       productId: id,
       name,
       price,
+      imageUrl,
     }
 
     decreaseCartItem(productToDecrease)
@@ -46,14 +49,13 @@ const ProductCard = (product: ProductProps) => {
         src={beer}
         alt='beer glasses'
         width={100}
+        height={100}
         className='bg-slate-700 rounded-l-md object-cover h-30'
       />
 
       <div className='p-3 w-full h-full'>
         <div className='flex flex-col items-start justify-center gap-2'>
-          <span className='text-lg font-semibold line-clamp-1'>
-            {name}
-          </span>
+          <span className='text-lg font-semibold line-clamp-1'>{name}</span>
           <span>R$ {price / 100}</span>
         </div>
 
@@ -66,6 +68,7 @@ const ProductCard = (product: ProductProps) => {
                   id,
                   name,
                   price,
+                  imageUrl,
                 })
               }
             >
@@ -81,6 +84,7 @@ const ProductCard = (product: ProductProps) => {
                   id,
                   name,
                   price,
+                  imageUrl,
                 })
               }
             >
@@ -94,6 +98,7 @@ const ProductCard = (product: ProductProps) => {
                   id,
                   name,
                   price,
+                  imageUrl,
                 })
               }
             >
@@ -102,7 +107,6 @@ const ProductCard = (product: ProductProps) => {
           </div>
         )}
       </div>
-
     </div>
   )
 }

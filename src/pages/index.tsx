@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import ProductCard from '@/components/product/ProductCard'
 import { GetServerSideProps } from 'next'
+import { prisma } from '@/lib/prisma'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -10,33 +11,14 @@ interface Product {
     id: number
     name: string
     price: number
+    imageUrl: string
   }[]
 }
 
-const products = [
-  {
-    id: 1,
-    name: 'Coca Cola 2L',
-    price: 1299,
-  },
-  {
-    id: 2,
-    name: 'Brahma Lata 330ml',
-    price: 599,
-  },
-  {
-    id: 3,
-    name: 'Brahma garrafa 600L',
-    price: 1299,
-  },
-  {
-    id: 4,
-    name: 'Coca Cola 2L - Retornável',
-    price: 1299,
-  },
-]
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const productsArray = await prisma.product.findMany()
+  const products = JSON.parse(JSON.stringify(productsArray))
+
   return {
     props: { products },
   }

@@ -6,6 +6,7 @@ interface CartProduct {
   price: number
   quantify?: number
   amount?: number
+  imageUrl: string
 }
 
 interface CartContext {
@@ -36,7 +37,7 @@ export function CartProvider({ children }: CartProviderProps) {
   let totalAmount = 0
 
   function increaseCartItem(data: CartProduct) {
-    const { productId, name, price } = data
+    const { productId, name, price, imageUrl } = data
 
     const existingProduct = cartProducts.find(
       (product) => productId === product.productId
@@ -51,6 +52,7 @@ export function CartProvider({ children }: CartProviderProps) {
       price,
       quantify,
       amount,
+      imageUrl,
     }
 
     if (!existingProduct) {
