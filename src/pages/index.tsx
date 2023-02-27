@@ -49,7 +49,7 @@ export default function Home({ products }: Product) {
           Bem vindo, Boozer
         </h1>
 
-        <div className='flex items-start justify-start w-full py-8 gap-8'>
+        <div className='flex flex-wrap items-start justify-start w-full py-8 gap-8'>
           <div
             className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'
             onClick={() => setFilteredProducts(products)}

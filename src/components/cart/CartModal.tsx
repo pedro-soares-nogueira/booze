@@ -11,6 +11,7 @@ import * as z from 'zod'
 import { useOrder } from '@/contexts/OrderContext'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/router'
 
 const PaymentModeType = z.object({
   paymentMode: z.enum(['pix', 'credito', 'debito']),
@@ -20,6 +21,7 @@ type PaymentModeInputs = z.infer<typeof PaymentModeType>
 
 const CartModal = () => {
   const { orderAdrees } = useOrder()
+  const { deleteCart } = useCart()
   const [isAdreesModelOpen, setIsAdreesModelOpen] = useState(false)
   const {
     control,
@@ -35,6 +37,8 @@ const CartModal = () => {
     totalOrderAmountFormatterdPlusTax,
   } = useCart()
 
+  const router = useRouter()
+
   const createOrder = (data: PaymentModeInputs) => {
     const neworder = {
       adrees: orderAdrees,
@@ -43,6 +47,8 @@ const CartModal = () => {
       priceAmount: totalOrderAmountFormatterdPlusTax,
     }
     console.log(neworder)
+    deleteCart()
+    setIsAdreesModelOpen(false)
   }
 
   return (
@@ -50,7 +56,8 @@ const CartModal = () => {
       <Dialog.Overlay className='fixed w-screen h-screen inset-0 bg-black opacity-70' />
       <Dialog.Content
         className='bg-zinc-800 fixed inset-y-0 right-0 max-w-[420px] w-full 
-                    flex flex-col items-start justify-between px-6 py-6'
+                    flex flex-col items-start justify-between px-6 py-6 overflow-auto
+                    scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-600 scrollbar-thumb-rounded-full'
       >
         {cartProducts.length === 0 ? (
           <div className='space-y-10 w-full'>
@@ -74,10 +81,7 @@ const CartModal = () => {
             </div>
           </div>
         ) : (
-          <form
-            onSubmit={handleSubmit(createOrder)}
-            className='w-full space-y-5'
-          >
+          <div className='w-full space-y-5'>
             <div className='space-y-10 w-full'>
               <div className='flex items-center justify-between'>
                 <Dialog.Title className='text-2xl font-semibold'>
@@ -89,18 +93,13 @@ const CartModal = () => {
               </div>
 
               <div className='space-y-8'>
-                <div
-                  className='space-y-3 h-[250px] overflow-auto pr-4 
-                            scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-600 scrollbar-thumb-rounded-full'
-                >
-                  {cartProducts?.map((product) => {
-                    return (
-                      <div key={product.productId}>
-                        <ProductCard id={product.productId} {...product} />
-                      </div>
-                    )
-                  })}
-                </div>
+                {cartProducts?.map((product) => {
+                  return (
+                    <div key={product.productId}>
+                      <ProductCard id={product.productId} {...product} />
+                    </div>
+                  )
+                })}
 
                 <div className='space-y-3'>
                   <div>
@@ -203,7 +202,7 @@ const CartModal = () => {
                   <button className='font-semibold px-5'>Sair</button>
                 </Dialog.Close>
                 <button
-                  type='submit'
+                  onClick={handleSubmit(createOrder)}
                   className='py-3 px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
                             transition-all disabled:opacity-25 w-full'
                 >
@@ -211,7 +210,7 @@ const CartModal = () => {
                 </button>
               </div>
             </div>
-          </form>
+          </div>
         )}
       </Dialog.Content>
     </Dialog.Portal>
