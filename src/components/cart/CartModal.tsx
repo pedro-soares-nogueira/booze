@@ -3,44 +3,47 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Check, X, Warning } from 'phosphor-react'
 import ProductCard from '../product/ProductCard'
 import { useCart } from '@/contexts/CartContext'
-import { priceFormatter } from '@/utils/formatter'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import Image from 'next/image'
 import emptyCart from '@/assets/empty-cart.png'
 import AdressModel from './AdressModel'
 import * as z from 'zod'
 import { useOrder } from '@/contexts/OrderContext'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-const OrdersType = z.object({
-  adrees: z.object({
-    cep: z.number().min(3),
-    rua: z.string().min(3),
-    numero: z.string().min(3),
-    bairro: z.string().min(3),
-    complemento: z.string(),
-  }),
+const PaymentModeType = z.object({
   paymentMode: z.enum(['pix', 'credito', 'debito']),
-  products: z
-    .object({
-      productsId: z.string(),
-      quantify: z.number(),
-    })
-    .array(),
 })
 
-type OrdersInputs = z.infer<typeof OrdersType>
+type PaymentModeInputs = z.infer<typeof PaymentModeType>
 
 const CartModal = () => {
   const { orderAdrees } = useOrder()
   const [isAdreesModelOpen, setIsAdreesModelOpen] = useState(false)
-
-  const setAdreesModelClose = () => {}
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<PaymentModeInputs>({
+    resolver: zodResolver(PaymentModeType),
+  })
 
   const {
     cartProducts,
     totalOrderAmountFormatted,
     totalOrderAmountFormatterdPlusTax,
   } = useCart()
+
+  const createOrder = (data: PaymentModeInputs) => {
+    const neworder = {
+      adrees: orderAdrees,
+      paymentMode: data.paymentMode,
+      products: cartProducts,
+      priceAmount: totalOrderAmountFormatterdPlusTax,
+    }
+    console.log(neworder)
+  }
 
   return (
     <Dialog.Portal>
@@ -71,7 +74,10 @@ const CartModal = () => {
             </div>
           </div>
         ) : (
-          <>
+          <form
+            onSubmit={handleSubmit(createOrder)}
+            className='w-full space-y-5'
+          >
             <div className='space-y-10 w-full'>
               <div className='flex items-center justify-between'>
                 <Dialog.Title className='text-2xl font-semibold'>
@@ -99,28 +105,47 @@ const CartModal = () => {
                 <div className='space-y-3'>
                   <div>
                     <p className='pb-2'>Forma de pagamento</p>
-                    <RadioGroup.Root className='flex items-start justify-center gap-2 '>
-                      <RadioGroup.Item
-                        value={'pix'}
-                        className='px-4 py-3 bg-purple-800 opacity-30 rounded-md w-full aria-checked:opacity-90'
-                      >
-                        Pix
-                      </RadioGroup.Item>
+                    <Controller
+                      name='paymentMode'
+                      control={control}
+                      render={({ field }) => {
+                        return (
+                          <RadioGroup.Root
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            className='flex items-start justify-center gap-2 '
+                          >
+                            <RadioGroup.Item
+                              value={'pix'}
+                              className='px-4 py-3 bg-purple-800 opacity-30 rounded-md w-full aria-checked:opacity-90'
+                            >
+                              Pix
+                            </RadioGroup.Item>
 
-                      <RadioGroup.Item
-                        value={'credito'}
-                        className='px-4 py-3 bg-purple-800 opacity-30 rounded-md w-full aria-checked:opacity-90'
-                      >
-                        Crédito
-                      </RadioGroup.Item>
+                            <RadioGroup.Item
+                              value={'credito'}
+                              className='px-4 py-3 bg-purple-800 opacity-30 rounded-md w-full aria-checked:opacity-90'
+                            >
+                              Crédito
+                            </RadioGroup.Item>
 
-                      <RadioGroup.Item
-                        value={'debito'}
-                        className='px-4 py-3 bg-purple-800 opacity-30 rounded-md w-full aria-checked:opacity-90'
-                      >
-                        Débito
-                      </RadioGroup.Item>
-                    </RadioGroup.Root>
+                            <RadioGroup.Item
+                              value={'debito'}
+                              className='px-4 py-3 bg-purple-800 opacity-30 rounded-md w-full aria-checked:opacity-90'
+                            >
+                              Débito
+                            </RadioGroup.Item>
+                          </RadioGroup.Root>
+                        )
+                      }}
+                    />
+                    {errors.paymentMode ? (
+                      <small className='text-red-400'>
+                        Forma de pagamento é obrigatória
+                      </small>
+                    ) : (
+                      <small></small>
+                    )}
                   </div>
 
                   <Dialog.Root
@@ -133,7 +158,7 @@ const CartModal = () => {
                           className='py-3 px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-700 
                                     transition-all disabled:opacity-25 w-full flex items-center justify-center gap-3'
                         >
-                          Endereço confirmado 
+                          Endereço confirmado
                           <Check size={22} />
                         </button>
                       ) : (
@@ -186,7 +211,7 @@ const CartModal = () => {
                 </button>
               </div>
             </div>
-          </>
+          </form>
         )}
       </Dialog.Content>
     </Dialog.Portal>
