@@ -25,6 +25,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 export default function Home({ products }: Product) {
+  console.log(products)
   return (
     <>
       <Head>
@@ -35,7 +36,20 @@ export default function Home({ products }: Product) {
       </Head>
       <main className='flex flex-col items-start justify-center gap-8 py-8 px-4'>
         <h1 className='text-2xl font-bold text-center w-full'>Hello Boozer</h1>
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 m-auto'>
+
+        <div className='flex items-center justify-between w-full py-8'>
+          <div className='bg-slate-600 rounded-md p-5 font-semibold hover:bg-slate-700 cursor-pointer transition-all'>
+            Cervejas
+          </div>
+          <div className='bg-slate-600 rounded-md p-5 font-semibold hover:bg-slate-700 cursor-pointer transition-all'>
+            Refrigerantes
+          </div>
+          <div className='bg-slate-600 rounded-md p-5 font-semibold hover:bg-slate-700 cursor-pointer transition-all'>
+            Combos
+          </div>
+        </div>
+
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 m-auto w-full'>
           {products.map((product) => {
             return <ProductCard key={product.id} {...product} />
           })}

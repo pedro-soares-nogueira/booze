@@ -17,5 +17,17 @@ model Product {
   price     Int
   createdAt DateTime @default(now())
 
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
   @@map("products")
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  products  Product[]
+
+  @@map("categories")
 }

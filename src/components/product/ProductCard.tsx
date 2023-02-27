@@ -1,7 +1,7 @@
-import Image from 'next/image'
+//import Image from 'next/image'
 import React from 'react'
 import beer from '@/assets/productImages/glasses-beer.jpg'
-import { ShoppingCartSimple, Plus, Minus } from 'phosphor-react'
+import { ShoppingCartSimple, Plus, Minus, Image } from 'phosphor-react'
 import { useCart } from '@/contexts/CartContext'
 
 interface ProductProps {
@@ -45,13 +45,18 @@ const ProductCard = (product: ProductProps) => {
 
   return (
     <div className='flex items-start justify-start gap-2 bg-gray-800 rounded-md'>
-      <Image
+      <div 
+        className='bg-slate-700 rounded-l-md object-cover w-full h-full flex items-center justify-center'
+        >
+<Image size={32} />
+      </div>
+{/*       <Image
         src={beer}
         alt='beer glasses'
         width={100}
         height={100}
         className='bg-slate-700 rounded-l-md object-cover h-30'
-      />
+      /> */}
 
       <div className='p-3 w-full h-full'>
         <div className='flex flex-col items-start justify-center gap-2'>
