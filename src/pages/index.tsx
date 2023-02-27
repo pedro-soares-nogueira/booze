@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import ProductCard from '@/components/product/ProductCard'
 import { GetServerSideProps } from 'next'
 import { prisma } from '@/lib/prisma'
+import { useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,6 +13,8 @@ interface Product {
     name: string
     price: number
     imageUrl: string
+    categoryId: string
+    createdAt: string
   }[]
 }
 
@@ -25,6 +28,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 export default function Home({ products }: Product) {
+  const [filteredProducts, setFilteredProducts] = useState(products)
+
+  const filterProductsByCategory = (category: string) => {
+    const newProducts = products.filter((prod) => prod.categoryId === category)
+
+    setFilteredProducts(newProducts)
+  }
+
   return (
     <>
       <Head>
@@ -34,22 +45,45 @@ export default function Home({ products }: Product) {
         <link rel='icon' href='/minibar-black.png' />
       </Head>
       <main className='flex flex-col items-start justify-center gap-8 py-8 px-4'>
-        <h1 className='text-2xl font-bold text-center w-full'>Hello Boozer</h1>
+        <h1 className='text-2xl font-bold text-center w-full'>
+          Bem vindo, Boozer
+        </h1>
 
         <div className='flex items-start justify-start w-full py-8 gap-8'>
-          <div className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'>
+          <div
+            className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'
+            onClick={() => setFilteredProducts(products)}
+          >
+            Todos
+          </div>
+          <div
+            className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'
+            onClick={() =>
+              filterProductsByCategory('ec049b03-8048-4c21-9680-4dc15ad86ac4')
+            }
+          >
             Cervejas
           </div>
-          <div className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'>
+          <div
+            className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'
+            onClick={() =>
+              filterProductsByCategory('d61bd50c-35fc-49c3-916d-00096a00220e')
+            }
+          >
             Refrigerantes
           </div>
-          <div className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'>
+          <div
+            className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'
+            onClick={() =>
+              filterProductsByCategory('4e36fcc7-b775-4c65-8971-7f09f0ca42d0')
+            }
+          >
             Combos
           </div>
         </div>
 
         <div className='grid grid-cols-1 md:grid-cols-3 gap-4 m-auto w-full'>
-          {products.map((product) => {
+          {filteredProducts.map((product) => {
             return <ProductCard key={product.id} {...product} />
           })}
         </div>
