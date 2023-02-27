@@ -7,6 +7,7 @@ import { priceFormatter } from '@/utils/formatter'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import Image from 'next/image'
 import emptyCart from '@/assets/empty-cart.png'
+import AdressModel from './AdressModel'
 
 const CartModal = () => {
   const { cartProducts } = useCart()
@@ -42,14 +43,14 @@ const CartModal = () => {
               </Dialog.Close>
             </div>
 
-            <div className="flex flex-col items-center justify-center gap-5 pt-20">
+            <div className='flex flex-col items-center justify-center gap-5 pt-20'>
               <Image src={emptyCart} width={200} height={200} alt='' />
-              <p className="font-semibold text-2xl">Carrinho Vazio</p>
+              <p className='font-semibold text-2xl'>Carrinho Vazio</p>
               <Dialog.Close asChild className='cursor-pointer'>
-              <small className="underline underline-offset-4">
-                Volte e veja nossos produtos
-              </small>
-                </Dialog.Close>
+                <small className='underline underline-offset-4'>
+                  Volte e veja nossos produtos
+                </small>
+              </Dialog.Close>
             </div>
           </div>
         ) : (
@@ -105,12 +106,17 @@ const CartModal = () => {
                     </RadioGroup.Root>
                   </div>
 
-                  <button
-                    className='py-3 px-4 rounded-lg font-bold bg-blue-800 text-white hover:bg-blue-700 
-                            transition-all disabled:opacity-25 w-full'
-                  >
-                    Enderereço de entrega
-                  </button>
+                  <Dialog.Root>
+                    <Dialog.Trigger asChild>
+                      <button
+                        className='py-3 px-4 rounded-lg font-bold bg-blue-800 text-white hover:bg-blue-700 
+                              transition-all disabled:opacity-25 w-full'
+                      >
+                        Enderereço de entrega
+                      </button>
+                    </Dialog.Trigger>
+                    <AdressModel/>
+                  </Dialog.Root>
                 </div>
               </div>
             </div>
