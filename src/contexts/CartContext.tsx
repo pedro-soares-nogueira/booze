@@ -1,4 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from 'react'
+import { priceFormatter } from './../utils/formatter'
 
 interface CartProduct {
   productId: number
@@ -16,6 +17,8 @@ interface CartContext {
   increaseCartItem: (data: CartProduct) => void
   decreaseCartItem: (data: CartProduct) => void
   deleteCart: () => void
+  totalOrderAmountFormatted: string
+  totalOrderAmountFormatterdPlusTax: string
 }
 
 interface CartProviderProps {
@@ -30,11 +33,11 @@ export function useCart() {
 export function CartProvider({ children }: CartProviderProps) {
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([])
 
-
   let totalQuantify = cartProducts.reduce(
     (quantity, item) => item.quantify! + quantity,
     0
   )
+
   let totalAmount = 0
 
   function increaseCartItem(data: CartProduct) {
@@ -113,6 +116,19 @@ export function CartProvider({ children }: CartProviderProps) {
     setCartProducts([])
   }
 
+  const totalOrderAmount = cartProducts.reduce(
+    (totalAmount, prod) => totalAmount + prod.amount!,
+    0
+  )
+
+  const totalOrderAmountFormatted = priceFormatter.format(
+    totalOrderAmount / 100
+  )
+
+  const totalOrderAmountFormatterdPlusTax = priceFormatter.format(
+    totalOrderAmount / 100 + 3
+  )
+
   return (
     <CartContext.Provider
       value={{
@@ -122,6 +138,8 @@ export function CartProvider({ children }: CartProviderProps) {
         increaseCartItem,
         decreaseCartItem,
         deleteCart,
+        totalOrderAmountFormatted,
+        totalOrderAmountFormatterdPlusTax,
       }}
     >
       {children}

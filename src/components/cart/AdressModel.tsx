@@ -3,6 +3,7 @@ import { X } from 'phosphor-react'
 import React from 'react'
 
 const AdressModel = () => {
+
   return (
     <div>
       <Dialog.Portal>
@@ -22,11 +23,11 @@ const AdressModel = () => {
             </div>
 
             <button
-                  className='py-3 px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
+              className='py-3 px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
                             transition-all disabled:opacity-25 w-full'
-                >
-                  Confirmar e continuar o pedido
-                </button>
+            >
+              Confirmar e continuar o pedido
+            </button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

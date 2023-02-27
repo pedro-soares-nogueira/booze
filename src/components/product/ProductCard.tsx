@@ -48,7 +48,7 @@ const ProductCard = (product: ProductProps) => {
 
   return (
     <div className='flex items-start justify-start gap-2 bg-neutral-700 rounded-md w-full h-full'>
-      <div className='bg-neutral-600 rounded-l-md object-cover w-full h-full flex items-center justify-center'>
+      <div className='rounded-l-md object-cover w-full h-full flex items-center justify-center'>
         <Image size={32} />
       </div>
       {/*       <Image

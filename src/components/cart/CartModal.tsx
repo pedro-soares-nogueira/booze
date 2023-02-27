@@ -8,22 +8,36 @@ import * as RadioGroup from '@radix-ui/react-radio-group'
 import Image from 'next/image'
 import emptyCart from '@/assets/empty-cart.png'
 import AdressModel from './AdressModel'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+
+const OrdersType = z.object({
+  adrees: z.object({
+    cep: z.number().min(3),
+    rua: z.string().min(3),
+    numero: z.string().min(3),
+    bairro: z.string().min(3),
+    complemento: z.string(),
+  }),
+  paymentMode: z.enum(['pix', 'credito', 'debito']),
+  productsId: z.string().array()
+})
+
+type OrdersInputs = z.infer<typeof OrdersType>
 
 const CartModal = () => {
-  const { cartProducts } = useCart()
+  const {
+    cartProducts,
+    totalOrderAmountFormatted,
+    totalOrderAmountFormatterdPlusTax,
+  } = useCart()
 
-  const totalOrderAmount = cartProducts.reduce(
-    (totalAmount, prod) => totalAmount + prod.amount!,
-    0
-  )
+  const newOrderForm = useForm<OrdersInputs>({})
+  const { handleSubmit } = newOrderForm
 
-  const totalOrderAmountFormatted = priceFormatter.format(
-    totalOrderAmount / 100
-  )
-
-  const totalOrderAmountFormatterdPlusTax = priceFormatter.format(
-    totalOrderAmount / 100 + 3
-  )
+  const confirmOrder = (data: OrdersInputs) => {
+    console.log(data)
+  }
 
   return (
     <Dialog.Portal>
@@ -54,9 +68,9 @@ const CartModal = () => {
             </div>
           </div>
         ) : (
-          <>
-            <div className='space-y-10 w-full'>
-              <div className='flex items-center justify-between w-full'>
+          <form onSubmit={handleSubmit(confirmOrder)} className='w-full'>
+            <div className='space-y-10'>
+              <div className='flex items-center justify-between'>
                 <Dialog.Title className='text-2xl font-semibold'>
                   Seu carrinho
                 </Dialog.Title>
@@ -115,7 +129,7 @@ const CartModal = () => {
                         Enderereço de entrega
                       </button>
                     </Dialog.Trigger>
-                    <AdressModel/>
+                    <AdressModel />
                   </Dialog.Root>
                 </div>
               </div>
@@ -146,6 +160,7 @@ const CartModal = () => {
                   <button className='font-semibold px-5'>Sair</button>
                 </Dialog.Close>
                 <button
+                  type='submit'
                   className='py-3 px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
                             transition-all disabled:opacity-25 w-full'
                 >
@@ -153,7 +168,7 @@ const CartModal = () => {
                 </button>
               </div>
             </div>
-          </>
+          </form>
         )}
       </Dialog.Content>
     </Dialog.Portal>
