@@ -25,7 +25,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 export default function Home({ products }: Product) {
-  console.log(products)
   return (
     <>
       <Head>
@@ -37,14 +36,14 @@ export default function Home({ products }: Product) {
       <main className='flex flex-col items-start justify-center gap-8 py-8 px-4'>
         <h1 className='text-2xl font-bold text-center w-full'>Hello Boozer</h1>
 
-        <div className='flex items-center justify-between w-full py-8'>
-          <div className='bg-slate-600 rounded-md p-5 font-semibold hover:bg-slate-700 cursor-pointer transition-all'>
+        <div className='flex items-start justify-start w-full py-8 gap-8'>
+          <div className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'>
             Cervejas
           </div>
-          <div className='bg-slate-600 rounded-md p-5 font-semibold hover:bg-slate-700 cursor-pointer transition-all'>
+          <div className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'>
             Refrigerantes
           </div>
-          <div className='bg-slate-600 rounded-md p-5 font-semibold hover:bg-slate-700 cursor-pointer transition-all'>
+          <div className='bg-neutral-600 rounded-md p-5 font-semibold hover:bg-neutral-700 cursor-pointer transition-all'>
             Combos
           </div>
         </div>

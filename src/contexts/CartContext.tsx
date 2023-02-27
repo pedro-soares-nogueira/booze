@@ -30,6 +30,7 @@ export function useCart() {
 export function CartProvider({ children }: CartProviderProps) {
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([])
 
+
   let totalQuantify = cartProducts.reduce(
     (quantity, item) => item.quantify! + quantity,
     0

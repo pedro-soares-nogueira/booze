@@ -3,6 +3,7 @@ import React from 'react'
 import beer from '@/assets/productImages/glasses-beer.jpg'
 import { ShoppingCartSimple, Plus, Minus, Image } from 'phosphor-react'
 import { useCart } from '@/contexts/CartContext'
+import { priceFormatter } from '@/utils/formatter'
 
 interface ProductProps {
   id: number
@@ -43,14 +44,14 @@ const ProductCard = (product: ProductProps) => {
     decreaseCartItem(productToDecrease)
   }
 
+  const priceformated = priceFormatter.format(price / 100)
+
   return (
-    <div className='flex items-start justify-start gap-2 bg-gray-800 rounded-md'>
-      <div 
-        className='bg-slate-700 rounded-l-md object-cover w-full h-full flex items-center justify-center'
-        >
-<Image size={32} />
+    <div className='flex items-start justify-start gap-2 bg-neutral-700 rounded-md w-full h-full'>
+      <div className='bg-neutral-600 rounded-l-md object-cover w-full h-full flex items-center justify-center'>
+        <Image size={32} />
       </div>
-{/*       <Image
+      {/*       <Image
         src={beer}
         alt='beer glasses'
         width={100}
@@ -61,7 +62,7 @@ const ProductCard = (product: ProductProps) => {
       <div className='p-3 w-full h-full'>
         <div className='flex flex-col items-start justify-center gap-2'>
           <span className='text-lg font-semibold line-clamp-1'>{name}</span>
-          <span>R$ {price / 100}</span>
+          <span>R$ {priceformated}</span>
         </div>
 
         {actualProduct?.quantify === undefined ? (
@@ -85,20 +86,6 @@ const ProductCard = (product: ProductProps) => {
             <button
               className='rounded-full border-2 border-neutral-300 p-1'
               onClick={() =>
-                increaseCart({
-                  id,
-                  name,
-                  price,
-                  imageUrl,
-                })
-              }
-            >
-              <Plus size={18} />
-            </button>
-            <span>{actualProduct?.quantify}</span>
-            <button
-              className='rounded-full border-2 border-neutral-300 p-1'
-              onClick={() =>
                 decreaseCart({
                   id,
                   name,
@@ -108,6 +95,20 @@ const ProductCard = (product: ProductProps) => {
               }
             >
               <Minus size={18} />
+            </button>
+            <span>{actualProduct?.quantify}</span>
+            <button
+              className='rounded-full border-2 border-neutral-300 p-1'
+              onClick={() =>
+                increaseCart({
+                  id,
+                  name,
+                  price,
+                  imageUrl,
+                })
+              }
+            >
+              <Plus size={18} />
             </button>
           </div>
         )}
