@@ -20,14 +20,21 @@ const AdreesType = z.object({
 type AdreesInputs = z.infer<typeof AdreesType>
 
 const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
-  const { getOrderAdrees } = useOrder()
-  
+  const { getOrderAdrees, orderAdrees } = useOrder()
+
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm<AdreesInputs>({
     resolver: zodResolver(AdreesType),
+    defaultValues: {
+      cep: orderAdrees?.cep,
+      rua: orderAdrees?.rua,
+      numero: orderAdrees?.numero,
+      bairro: orderAdrees?.bairro,
+      complemento: orderAdrees?.complemento,
+    },
   })
 
   const getAdrees = (data: AdreesInputs) => {

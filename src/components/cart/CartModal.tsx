@@ -31,7 +31,7 @@ const OrdersType = z.object({
 type OrdersInputs = z.infer<typeof OrdersType>
 
 const CartModal = () => {
-  const { adrees } = useOrder()
+  const { orderAdrees } = useOrder()
   const [isAdreesModelOpen, setIsAdreesModelOpen] = useState(false)
 
   const setAdreesModelClose = () => {}
@@ -128,7 +128,7 @@ const CartModal = () => {
                     onOpenChange={setIsAdreesModelOpen}
                   >
                     <Dialog.Trigger asChild>
-                      {adrees !== undefined ? (
+                      {orderAdrees !== undefined ? (
                         <button
                           className='py-3 px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-700 
                                     transition-all disabled:opacity-25 w-full flex items-center justify-center gap-3'

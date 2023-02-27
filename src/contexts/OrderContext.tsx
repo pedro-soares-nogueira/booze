@@ -28,7 +28,7 @@ interface AdressType {
 interface OrderContext {
   orders: Order[]
   getOrderAdrees: (data: AdressType) => void
-  adrees: AdressType | undefined
+  orderAdrees: AdressType | undefined
 }
 
 interface OrderProviderProps {
@@ -43,14 +43,14 @@ export function useOrder() {
 
 export function OrderProvider({ children }: OrderProviderProps) {
   const [orders, setOrders] = useLocalStorage<Order[]>('@booze/orders.01', [])
-  const [adrees, setAdrees] = useState<AdressType>()
+  const [orderAdrees, setOrderAdrees] = useState<AdressType>()
 
   const getOrderAdrees = (data: AdressType) => {
-    setAdrees(data)
+    setOrderAdrees(data)
   }
 
   return (
-    <OrderContext.Provider value={{ orders, getOrderAdrees, adrees }}>
+    <OrderContext.Provider value={{ orders, getOrderAdrees, orderAdrees }}>
       {children}
     </OrderContext.Provider>
   )
