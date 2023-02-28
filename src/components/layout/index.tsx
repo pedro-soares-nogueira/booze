@@ -6,6 +6,7 @@ import { useCart } from '@/contexts/CartContext'
 import beer from '@/assets/minibar-white.png'
 import * as Dialog from '@radix-ui/react-dialog'
 import CartModal from '../cart/CartModal'
+import Link from 'next/link'
 
 interface Layout {
   children: ReactNode
@@ -24,7 +25,9 @@ const Layout = ({ children }: Layout) => {
 
           <ul className='flex items-center justify-center gap-3 md:gap-5'>
             <li>
+            <Link href={'/'}>
               <House size={32} weight={'fill'} />
+              </Link>
             </li>
 
             <li className='relative'>
@@ -49,7 +52,9 @@ const Layout = ({ children }: Layout) => {
             </li>
 
             <li>
-              <User size={32} weight={'fill'} />
+              <Link href={'/user'}>
+                <User size={32} weight={'fill'} />
+              </Link>
             </li>
           </ul>
         </div>

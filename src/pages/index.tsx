@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 interface Product {
   products: {
-    id: number
+    id: string
     name: string
     price: number
     imageUrl: string
