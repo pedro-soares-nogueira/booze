@@ -2,14 +2,8 @@ import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { createContext, ReactNode, useContext, useState } from 'react'
 
 interface Order {
-  adrees: {
-    cep: string
-    rua: string
-    numero: string
-    bairro: string
-    complemento: string
-  }
-  paymentMode: ['pix', 'credito', 'debito']
+  adrees: AdressType
+  paymentMode: ['pix', 'credito', 'debito'] | string
   products: {
     productsId: string
     quantify: number
@@ -27,8 +21,9 @@ interface AdressType {
 
 interface OrderContext {
   orders: Order[]
-  getOrderAdrees: (data: AdressType) => void
   orderAdrees: AdressType | undefined
+  getOrderAdrees: (data: AdressType) => void
+  createNewOrder: (data: Order) => void
 }
 
 interface OrderProviderProps {
@@ -49,8 +44,14 @@ export function OrderProvider({ children }: OrderProviderProps) {
     setOrderAdrees(data)
   }
 
+  const createNewOrder = (data: Order) => {
+    console.log(data)
+  }
+
   return (
-    <OrderContext.Provider value={{ orders, getOrderAdrees, orderAdrees }}>
+    <OrderContext.Provider
+      value={{ orders, getOrderAdrees, createNewOrder, orderAdrees }}
+    >
       {children}
     </OrderContext.Provider>
   )

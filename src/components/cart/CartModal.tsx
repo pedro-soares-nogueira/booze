@@ -20,7 +20,7 @@ const PaymentModeType = z.object({
 type PaymentModeInputs = z.infer<typeof PaymentModeType>
 
 const CartModal = () => {
-  const { orderAdrees } = useOrder()
+  const { orderAdrees, createNewOrder } = useOrder()
   const { deleteCart } = useCart()
   const [isAdreesModelOpen, setIsAdreesModelOpen] = useState(false)
   const {
@@ -33,6 +33,7 @@ const CartModal = () => {
 
   const {
     cartProducts,
+    totalOrderAmountPlusTax,
     totalOrderAmountFormatted,
     totalOrderAmountFormatterdPlusTax,
   } = useCart()
@@ -40,15 +41,23 @@ const CartModal = () => {
   const router = useRouter()
 
   const createOrder = (data: PaymentModeInputs) => {
-    const neworder = {
-      adrees: orderAdrees,
+    const products = cartProducts.map((prods) => {
+      return {
+        productsId: prods.productId,
+        quantify: prods.quantify!,
+      }
+    })
+
+    const newOrder = {
+      adrees: orderAdrees!,
       paymentMode: data.paymentMode,
-      products: cartProducts,
-      priceAmount: totalOrderAmountFormatterdPlusTax,
+      products: products,
+      priceAmount: totalOrderAmountPlusTax,
     }
-    console.log(neworder)
+
+    console.log(newOrder)
     deleteCart()
-    setIsAdreesModelOpen(false)
+    createNewOrder(newOrder)
   }
 
   return (

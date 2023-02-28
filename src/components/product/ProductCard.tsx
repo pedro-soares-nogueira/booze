@@ -6,7 +6,7 @@ import { useCart } from '@/contexts/CartContext'
 import { priceFormatter } from '@/utils/formatter'
 
 interface ProductProps {
-  id: number
+  id: string
   name: string
   price: number
   imageUrl: string
@@ -47,8 +47,8 @@ const ProductCard = (product: ProductProps) => {
   const priceformated = priceFormatter.format(price / 100)
 
   return (
-    <div className='flex items-start justify-start gap-2 bg-neutral-700 rounded-md w-full h-full'>
-      <div className='rounded-l-md object-cover w-full h-full flex items-center justify-center mt-[2.8rem]'>
+    <div className='flex items-center justify-center gap-2 bg-neutral-700 rounded-md w-full h-full'>
+      <div className='rounded-l-md object-cover w-full h-full flex items-center justify-center'>
         <Image size={32} />
       </div>
       {/*       <Image

@@ -2,7 +2,7 @@ import { createContext, useContext, ReactNode, useState } from 'react'
 import { priceFormatter } from './../utils/formatter'
 
 interface CartProduct {
-  productId: number
+  productId: string
   name: string
   price: number
   quantify?: number
@@ -19,6 +19,7 @@ interface CartContext {
   deleteCart: () => void
   totalOrderAmountFormatted: string
   totalOrderAmountFormatterdPlusTax: string
+  totalOrderAmountPlusTax: number
 }
 
 interface CartProviderProps {
@@ -32,6 +33,9 @@ export function useCart() {
 
 export function CartProvider({ children }: CartProviderProps) {
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([])
+  //const [cartProducts, setCartProducts] = useLocalStorage<CartProduct[]>('@booze/orders.01', [])
+
+  console.log(cartProducts)
 
   let totalQuantify = cartProducts.reduce(
     (quantity, item) => item.quantify! + quantity,
@@ -121,6 +125,8 @@ export function CartProvider({ children }: CartProviderProps) {
     0
   )
 
+  const totalOrderAmountPlusTax = (totalOrderAmount / 100 + 3) * 100
+
   const totalOrderAmountFormatted = priceFormatter.format(
     totalOrderAmount / 100
   )
@@ -138,6 +144,7 @@ export function CartProvider({ children }: CartProviderProps) {
         increaseCartItem,
         decreaseCartItem,
         deleteCart,
+        totalOrderAmountPlusTax,
         totalOrderAmountFormatted,
         totalOrderAmountFormatterdPlusTax,
       }}
