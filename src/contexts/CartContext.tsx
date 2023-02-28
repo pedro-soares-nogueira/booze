@@ -35,8 +35,6 @@ export function CartProvider({ children }: CartProviderProps) {
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([])
   //const [cartProducts, setCartProducts] = useLocalStorage<CartProduct[]>('@booze/orders.01', [])
 
-  console.log(cartProducts)
-
   let totalQuantify = cartProducts.reduce(
     (quantity, item) => item.quantify! + quantity,
     0

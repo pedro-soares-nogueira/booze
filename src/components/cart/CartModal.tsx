@@ -55,7 +55,6 @@ const CartModal = () => {
       priceAmount: totalOrderAmountPlusTax,
     }
 
-    console.log(newOrder)
     deleteCart()
     createNewOrder(newOrder)
   }
