@@ -1,6 +1,11 @@
 import { prisma } from '@/lib/prisma'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+interface ProductsOnOrderType {
+  quantify: number
+  productsId: string
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -9,37 +14,41 @@ export default async function handler(
     return res.status(405).end()
   }
 
+  const { paymentMode, products, priceAmount, user } = req.body
+
+  const userId = await prisma.user.findFirst({
+    where: { email: user },
+  })
+
   const createOrder = await prisma.order.create({
     data: {
-      payment_mode: 'debito',
-      price_amount: 1599,
-      ProductsOnOrder: {
-        create: [
-          {
-            quantify: 2,
-            product: {
-              connect: {
-                id: 'a18bc28d-1aab-441f-9328-4271811cee98',
-              },
-            },
-          },
-          {
-            quantify: 1,
-            product: {
-              connect: {
-                id: '235285d9-ba54-42ca-b5b8-560f34641eef',
-              },
-            },
-          },
-        ],
-      },
+      payment_mode: paymentMode,
+      price_amount: priceAmount,
       user: {
         connect: {
-          id: '562e6862-4180-4814-a0a1-a583e7543183',
+          id: userId?.id,
         },
       },
     },
   })
 
-  return res.status(201).json(createOrder)
+  const product = products.forEach(async (prod: ProductsOnOrderType) => {
+    return await prisma.productsOnOrder.create({
+      data: {
+        quantify: prod.quantify,
+        product: {
+          connect: {
+            id: prod.productsId,
+          },
+        },
+        order: {
+          connect: {
+            id: createOrder.id,
+          },
+        },
+      },
+    })
+  })
+
+  return res.status(201).json({ createOrder })
 }

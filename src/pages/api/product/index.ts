@@ -9,8 +9,6 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  //const { categoryId } = req.body
-
   const products = await prisma.product.findMany({
     where: {},
   })
