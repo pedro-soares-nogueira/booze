@@ -2,23 +2,33 @@ import Layout from '@/components/layout'
 import { CartProvider } from '@/contexts/CartContext'
 import { OrderProvider } from '@/contexts/OrderContext'
 import type { AppProps } from 'next/app'
-import { SessionProvider } from "next-auth/react"
+import { SessionProvider } from 'next-auth/react'
 import '@/styles/globals.css'
+import { Session } from 'next-auth'
+import { NextPage } from 'next'
+import { ReactElement, ReactNode } from 'react'
+
+type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout<P> = AppProps<P> & { 
+  Component: NextPageWithLayout<P>; 
+}; 
 
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}: AppProps) {
+export default function App({ Component, pageProps }: AppPropsWithLayout<{ session: Session; }>) {
+  const getLayout = Component.getLayout ?? ((page) => page)
+
   return (
-    <SessionProvider session={session}>
-      <CartProvider>
-        <OrderProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </OrderProvider>
-      </CartProvider>
+    <SessionProvider session={pageProps.session}>
+        <CartProvider>
+          <OrderProvider>
+            {getLayout(
+              <Component {...pageProps} />
+            )}
+          </OrderProvider>
+        </CartProvider>
     </SessionProvider>
   )
 }

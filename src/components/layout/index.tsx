@@ -15,12 +15,12 @@ interface Layout {
 
 const Layout = ({ children }: Layout) => {
   const { totalQuantify } = useCart()
-
   const { data: session, status } = useSession()
+  /* 
 
   if (status === 'unauthenticated') {
     return <div className='max-w-[1100px] m-auto'>{children}</div>
-  }
+  } */
 
   return (
     <div>
@@ -28,11 +28,14 @@ const Layout = ({ children }: Layout) => {
         <div className='max-w-[1100px] m-auto flex items-center justify-between py-2 px-4'>
           <Image src={beer} width={40} height={40} alt='Logo' />
 
-          <span className='text-4xl font-semibold'>Booze</span>
+          <Link href={'/'}>
+            <span className='text-4xl font-semibold'>Booze</span>
+          </Link>
+
 
           <ul className='flex items-center justify-center gap-3 md:gap-5'>
             <li>
-              <Link href={'/'}>
+              <Link href={'/home'}>
                 <House size={32} weight={'fill'} />
               </Link>
             </li>

@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
 import { prisma } from './../../lib/prisma'
@@ -7,6 +7,7 @@ import { authOptions } from './../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { priceFormatter } from '@/utils/formatter'
 import Image from 'next/image'
+import Layout from '@/components/layout'
 
 interface Orders {
   orders: {
@@ -134,6 +135,10 @@ const User = ({ orders }: Orders) => {
       </main>
     </>
   )
+}
+
+User.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>
 }
 
 export default User

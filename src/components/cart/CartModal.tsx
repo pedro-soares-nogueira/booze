@@ -12,6 +12,7 @@ import { useOrder } from '@/contexts/OrderContext'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
+import deliveryBro from '@/assets/delivery-bro.svg'
 
 const PaymentModeType = z.object({
   paymentMode: z.enum(['pix', 'credito', 'debito']),
@@ -23,6 +24,9 @@ const CartModal = () => {
   const { orderAdrees, createNewOrder } = useOrder()
   const { deleteCart } = useCart()
   const [isAdreesModelOpen, setIsAdreesModelOpen] = useState(false)
+  const [isOrderConfirmed, setIsOrderConfirmed] = useState(false)
+  const wait = () => new Promise((resolve) => setTimeout(resolve, 5000));
+
   const {
     control,
     formState: { errors },
@@ -41,6 +45,7 @@ const CartModal = () => {
   const router = useRouter()
 
   const createOrder = (data: PaymentModeInputs) => {
+    setIsOrderConfirmed(true)
     const products = cartProducts.map((prods) => {
       return {
         productsId: prods.productId,
@@ -56,7 +61,42 @@ const CartModal = () => {
     }
 
     deleteCart()
-    createNewOrder(newOrder)
+    //createNewOrder(newOrder)
+    wait().then(() => setIsOrderConfirmed(false))
+  }
+
+  if (isOrderConfirmed) {
+    return (
+      <Dialog.Portal>
+        <Dialog.Overlay className='fixed w-screen h-screen inset-0 bg-black opacity-70' />
+        <Dialog.Content
+          className='bg-zinc-800 fixed inset-y-0 right-0 max-w-[420px] w-full 
+                    flex flex-col items-start justify-between px-6 py-6 overflow-auto
+                    scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-600 scrollbar-thumb-rounded-full'
+        >
+          <div className='w-full space-y-5'>
+            <div className='flex items-center justify-between'>
+              <Dialog.Title className='text-2xl font-semibold'>
+                Seu carrinho
+              </Dialog.Title>
+              <Dialog.Close asChild className='cursor-pointer'>
+                <X size={22} weight='bold' />
+              </Dialog.Close>
+            </div>
+
+            <div className='flex flex-col h-[80vh] items-center justify-center gap-6'>
+              <Image alt='' src={deliveryBro} width='300' height='100' />
+
+              <p className="text-center text-xl font-semibold text-green-500">Recebemos o pedido</p>
+              <p className="text-center text-md font-normal">
+                Nos próximos instantes você receberá notificações sobre as
+                atualizaçãos do seu pedido
+              </p>
+            </div>
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    )
   }
 
   return (
