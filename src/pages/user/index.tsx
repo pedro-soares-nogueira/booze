@@ -34,6 +34,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   })
   const orders = JSON.parse(JSON.stringify(ordersArray))
 
+  if (session?.user === undefined) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  }
+
   return {
     props: { orders },
   }
@@ -76,38 +85,37 @@ const User = ({ orders }: Orders) => {
 
             <div className='space-y-4'>
               <h2 className='text-lg font-semibold'>Todos os pedidos</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {orders.map((order) => {
-                return (
-                  <div
-                    key={order.id}
-                    className='bg-neutral-700 rounded-md w-full h-full p-4 space-y-3'
-                  >
-                    <div className='flex items-start justify-between gap-2 '>
-                      <p className='font-semibold text-lg uppercase'>
-                        {order.payment_mode}
-                      </p>
-                      <p className='font-semibold text-lg'>
-                        {priceFormatter.format(order.price_amount / 100)}
-                      </p>
+              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+                {orders.map((order) => {
+                  return (
+                    <div
+                      key={order.id}
+                      className='bg-neutral-700 rounded-md w-full h-full p-4 space-y-3'
+                    >
+                      <div className='flex items-start justify-between gap-2 '>
+                        <p className='font-semibold text-lg uppercase'>
+                          {order.payment_mode}
+                        </p>
+                        <p className='font-semibold text-lg'>
+                          {priceFormatter.format(order.price_amount / 100)}
+                        </p>
+                      </div>
+                      <div>
+                        <p>Xxxx xx XXXXX </p>
+                        <p>Xxxx xx XXXXX </p>
+                      </div>
+                      <div className='flex items-center justify-center'>
+                        <button className='py-2 w-full bg-green-500 rounded-md hover:bg-green-700 transition-all'>
+                          Refazer o pedido
+                        </button>
+                        <button className='py-2 w-full text-green-500 hover:text-green-700 transition-all'>
+                          Ver Mais
+                        </button>
+                      </div>
                     </div>
-                    <div>
-                      <p>Xxxx xx XXXXX </p>
-                      <p>Xxxx xx XXXXX </p>
-                    </div>
-                    <div className='flex items-center justify-center'>
-                      <button className='py-2 w-full bg-green-500 rounded-md hover:bg-green-700 transition-all'>
-                        Refazer o pedido
-                      </button>
-                      <button className='py-2 w-full text-green-500 hover:text-green-700 transition-all'>
-                        Ver Mais
-                      </button>
-                    </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
               </div>
-
             </div>
           </div>
         ) : (

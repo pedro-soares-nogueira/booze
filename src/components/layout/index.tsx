@@ -7,6 +7,7 @@ import beer from '@/assets/minibar-white.png'
 import * as Dialog from '@radix-ui/react-dialog'
 import CartModal from '../cart/CartModal'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 interface Layout {
   children: ReactNode
@@ -14,6 +15,12 @@ interface Layout {
 
 const Layout = ({ children }: Layout) => {
   const { totalQuantify } = useCart()
+
+  const { data: session, status } = useSession()
+
+  if (status === 'unauthenticated') {
+    return <div className='max-w-[1100px] m-auto'>{children}</div>
+  }
 
   return (
     <div>
@@ -25,8 +32,8 @@ const Layout = ({ children }: Layout) => {
 
           <ul className='flex items-center justify-center gap-3 md:gap-5'>
             <li>
-            <Link href={'/'}>
-              <House size={32} weight={'fill'} />
+              <Link href={'/'}>
+                <House size={32} weight={'fill'} />
               </Link>
             </li>
 
@@ -53,7 +60,11 @@ const Layout = ({ children }: Layout) => {
 
             <li>
               <Link href={'/user'}>
-                <User size={32} weight={'fill'} />
+                <img
+                  src={session?.user?.image}
+                  alt=''
+                  className='rounded-full w-9 h-9 flex items-center justify-center'
+                />
               </Link>
             </li>
           </ul>
