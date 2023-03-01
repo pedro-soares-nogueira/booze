@@ -1,9 +1,10 @@
-//import Image from 'next/image'
+import Image, { ImageLoaderProps } from 'next/image'
 import React from 'react'
 import beer from '@/assets/productImages/glasses-beer.jpg'
-import { ShoppingCartSimple, Plus, Minus, Image } from 'phosphor-react'
+import { ShoppingCartSimple, Plus, Minus } from 'phosphor-react'
 import { useCart } from '@/contexts/CartContext'
 import { priceFormatter } from '@/utils/formatter'
+import { cloudinaryImageLoader } from '@/utils/cloudinaryImageLoader'
 
 interface ProductProps {
   id: string
@@ -47,18 +48,19 @@ const ProductCard = (product: ProductProps) => {
   const priceformated = priceFormatter.format(price / 100)
 
   return (
-    <div className='flex items-center justify-center gap-2 bg-neutral-700 rounded-md w-full h-full'>
-      <div className='rounded-l-md object-cover w-full h-full flex items-center justify-center'>
-        <Image size={32} />
-      </div>
-      {/*       <Image
-        src={beer}
-        alt='beer glasses'
-        width={100}
-        height={100}
-        className='bg-slate-700 rounded-l-md object-cover h-30'
-      /> */}
+    <div className='flex items-center justify-center gap-2 bg-neutral-700 rounded-md w-full h-full overflow-hidden'>
+      <div className='bg-slate-700 rounded-l-md relative w-56 h-36'>
+        <Image
+          loader={cloudinaryImageLoader}
+          src={imageUrl}
+          alt='beer glasses'
+          fill
+          priority
+          className="object-cover"
+          sizes="auto"
 
+        />
+      </div>
       <div className='p-3 w-full h-full'>
         <div className='flex flex-col items-start justify-center gap-2'>
           <span className='text-lg font-semibold line-clamp-1'>{name}</span>
