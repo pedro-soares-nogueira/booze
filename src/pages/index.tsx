@@ -4,6 +4,8 @@ import ProductCard from '@/components/product/ProductCard'
 import { GetServerSideProps } from 'next'
 import { prisma } from '@/lib/prisma'
 import { useState } from 'react'
+import { getServerSession } from 'next-auth'
+import { authOptions } from './api/auth/[...nextauth]'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +23,16 @@ interface Product {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const productsArray = await prisma.product.findMany()
   const products = JSON.parse(JSON.stringify(productsArray))
+
+  const session = await getServerSession(context.req, context.res, authOptions)
+  if (session?.user === undefined) {
+    return {
+      redirect: {
+        destination: '/user',
+        permanent: false,
+      },
+    }
+  }
 
   return {
     props: { products },
