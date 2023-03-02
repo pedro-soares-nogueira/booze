@@ -6,16 +6,19 @@ import { prisma } from './../../lib/prisma'
 import { authOptions } from './../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { priceFormatter } from '@/utils/formatter'
-import Image from 'next/image'
 import Layout from '@/components/layout'
 
-interface Orders {
+interface OrdersDetails {
   orders: {
     id: string
     payment_mode: string
     price_amount: number
     userId: string
     createdAt: string
+  }[]
+  productsOnOrder: {
+    productId: string
+    orderId: string
   }[]
 }
 
@@ -35,6 +38,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   })
   const orders = JSON.parse(JSON.stringify(ordersArray))
 
+  const productsOnOrder = await prisma.productsOnOrder.findMany()
+
   if (session?.user === undefined) {
     return {
       redirect: {
@@ -45,12 +50,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: { orders },
+    props: { orders, productsOnOrder },
   }
 }
 
-const User = ({ orders }: Orders) => {
+const User = ({ orders, productsOnOrder }: OrdersDetails) => {
   const { data: session } = useSession()
+
+  function groupBy<T>(arr: T[], fn: (item: T) => any) {
+    return arr.reduce<Record<string, T[]>>((prev, curr) => {
+      const groupKey = fn(curr)
+      const group = prev[groupKey] || []
+      group.push(curr)
+      return { ...prev, [groupKey]: group }
+    }, {})
+  }
+
+  const groupProductsByOrders = Object.values(
+    groupBy(productsOnOrder, (item) => item.orderId)
+  )
+
+  console.log(groupProductsByOrders)
 
   return (
     <>
@@ -101,10 +121,7 @@ const User = ({ orders }: Orders) => {
                           {priceFormatter.format(order.price_amount / 100)}
                         </p>
                       </div>
-                      <div>
-                        <p>Xxxx xx XXXXX </p>
-                        <p>Xxxx xx XXXXX </p>
-                      </div>
+                      <div></div>
                       <div className='flex items-center justify-center'>
                         <button className='py-2 w-full bg-green-500 rounded-md hover:bg-green-700 transition-all'>
                           Refazer o pedido
