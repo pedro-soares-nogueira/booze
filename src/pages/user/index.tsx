@@ -7,6 +7,7 @@ import { authOptions } from './../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { priceFormatter } from '@/utils/formatter'
 import Layout from '@/components/layout'
+import ProductsOnOrder from '@/components/ProductsOnOrder'
 
 interface OrdersDetails {
   orders: {
@@ -18,6 +19,7 @@ interface OrdersDetails {
     ProductsOnOrder: {
       productId: string
       orderId: string
+      quantify: number
     }[]
   }[]
 }
@@ -37,14 +39,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
     include: {
       ProductsOnOrder: true,
-    }
+    },
   })
   const orders = JSON.parse(JSON.stringify(ordersArray))
-
-  const productsOnOrder = await prisma.productsOnOrder.findMany()
-
-  console.log(ordersArray)
-
 
   if (session?.user === undefined) {
     return {
@@ -62,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const User = ({ orders }: OrdersDetails) => {
   const { data: session } = useSession()
-  
+
   return (
     <>
       <Head>
@@ -102,9 +99,10 @@ const User = ({ orders }: OrdersDetails) => {
                   return (
                     <div
                       key={order.id}
-                      className='bg-white border border-gray-300 rounded-md w-full h-full p-4 space-y-3'
+                      className='bg-white border border-gray-300 rounded-md w-full h-full p-4 
+                                flex flex-col items-start justify-start gap-3'
                     >
-                      <div className='flex items-start justify-between gap-2 '>
+                      <div className='flex items-start justify-between gap-2 w-full'>
                         <p className='font-semibold text-lg uppercase'>
                           {order.payment_mode}
                         </p>
@@ -112,16 +110,15 @@ const User = ({ orders }: OrdersDetails) => {
                           {priceFormatter.format(order.price_amount / 100)}
                         </p>
                       </div>
-                      <div>
-                        {order.ProductsOnOrder.map((prod) => {
-                          return (
-                            <p>{prod.productId}</p>
-                          )
+                      
+                      <div className='w-full'>
+                        {order.ProductsOnOrder.map((prod, index) => {
+                          return <ProductsOnOrder key={index} {...prod}/>
                         })}
                       </div>
-                      <div className='flex items-center justify-center'>
+                      <div className='flex items-center justify-center w-full'>
                         <button className='py-2 w-full bg-green-500 rounded-md hover:bg-green-700 transition-all'>
-                          Refazer o pedido
+                          Refazer
                         </button>
                         <button className='py-2 w-full text-green-500 hover:text-green-700 transition-all'>
                           Ver Mais
