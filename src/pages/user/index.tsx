@@ -82,7 +82,7 @@ const User = ({ orders }: Orders) => {
               </div>
             </div>
 
-            <hr className='border-neutral-600' />
+            <hr className='border-gray-300' />
 
             <div className='space-y-4'>
               <h2 className='text-lg font-semibold'>Todos os pedidos</h2>
@@ -91,7 +91,7 @@ const User = ({ orders }: Orders) => {
                   return (
                     <div
                       key={order.id}
-                      className='bg-neutral-700 rounded-md w-full h-full p-4 space-y-3'
+                      className='bg-white border border-gray-300 rounded-md w-full h-full p-4 space-y-3'
                     >
                       <div className='flex items-start justify-between gap-2 '>
                         <p className='font-semibold text-lg uppercase'>
