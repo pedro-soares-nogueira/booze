@@ -48,7 +48,7 @@ const ProductCard = (product: ProductProps) => {
   const priceformated = priceFormatter.format(price / 100)
 
   return (
-    <div className='flex items-center justify-center gap-2 bg-neutral-700 rounded-md w-full h-full overflow-hidden'>
+    <div className='flex items-center justify-center gap-2 border border-gray-300 rounded-md w-full h-full overflow-hidden'>
       <div className='bg-slate-700 rounded-l-md relative w-56 h-36'>
         <Image
           loader={cloudinaryImageLoader}
@@ -70,7 +70,7 @@ const ProductCard = (product: ProductProps) => {
         {actualProduct?.quantify === undefined ? (
           <div className='flex flex-col items-end justify-center'>
             <button
-              className='rounded-full border-2 border-neutral-300 p-2'
+              className='rounded-full border border-neutral-300 p-2'
               onClick={() =>
                 increaseCart({
                   id,
@@ -86,7 +86,7 @@ const ProductCard = (product: ProductProps) => {
         ) : (
           <div className='flex items-center justify-end gap-3 mt-2'>
             <button
-              className='rounded-full border-2 border-neutral-300 p-1'
+              className='rounded-full border border-neutral-300 p-1'
               onClick={() =>
                 decreaseCart({
                   id,
@@ -100,7 +100,7 @@ const ProductCard = (product: ProductProps) => {
             </button>
             <span>{actualProduct?.quantify}</span>
             <button
-              className='rounded-full border-2 border-neutral-300 p-1'
+              className='rounded-full border border-neutral-300 p-1'
               onClick={() =>
                 increaseCart({
                   id,

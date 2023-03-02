@@ -61,7 +61,7 @@ const CartModal = () => {
     }
 
     deleteCart()
-    //createNewOrder(newOrder)
+    createNewOrder(newOrder)
     wait().then(() => setIsOrderConfirmed(false))
   }
 
@@ -70,9 +70,9 @@ const CartModal = () => {
       <Dialog.Portal>
         <Dialog.Overlay className='fixed w-screen h-screen inset-0 bg-black opacity-70' />
         <Dialog.Content
-          className='bg-zinc-800 fixed inset-y-0 right-0 max-w-[420px] w-full 
+          className='bg-white fixed inset-y-0 right-0 max-w-[420px] w-full 
                     flex flex-col items-start justify-between px-6 py-6 overflow-auto
-                    scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-600 scrollbar-thumb-rounded-full'
+                    scrollbar-thin scrollbar-thumb-neutral-400 scrollbar-track-neutral-300 scrollbar-thumb-rounded-full'
         >
           <div className='w-full space-y-5'>
             <div className='flex items-center justify-between'>
@@ -103,9 +103,9 @@ const CartModal = () => {
     <Dialog.Portal>
       <Dialog.Overlay className='fixed w-screen h-screen inset-0 bg-black opacity-70' />
       <Dialog.Content
-        className='bg-zinc-800 fixed inset-y-0 right-0 max-w-[420px] w-full 
+        className='bg-white fixed inset-y-0 right-0 max-w-[420px] w-full 
                     flex flex-col items-start justify-between px-6 py-6 overflow-auto
-                    scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-600 scrollbar-thumb-rounded-full'
+                    scrollbar-thin scrollbar-thumb-neutral-400 scrollbar-track-neutral-300 scrollbar-thumb-rounded-full'
       >
         {cartProducts.length === 0 ? (
           <div className='space-y-10 w-full'>
@@ -164,21 +164,21 @@ const CartModal = () => {
                           >
                             <RadioGroup.Item
                               value={'pix'}
-                              className='px-4 py-3 bg-purple-800 opacity-30 rounded-md w-full aria-checked:opacity-90'
+                              className='px-4 py-3 bg-purple-800 opacity-50 text-white rounded-md w-full aria-checked:opacity-90'
                             >
                               Pix
                             </RadioGroup.Item>
 
                             <RadioGroup.Item
                               value={'credito'}
-                              className='px-4 py-3 bg-purple-800 opacity-30 rounded-md w-full aria-checked:opacity-90'
+                              className='px-4 py-3 bg-purple-800 opacity-50 text-white rounded-md w-full aria-checked:opacity-90'
                             >
                               Crédito
                             </RadioGroup.Item>
 
                             <RadioGroup.Item
                               value={'debito'}
-                              className='px-4 py-3 bg-purple-800 opacity-30 rounded-md w-full aria-checked:opacity-90'
+                              className='px-4 py-3 bg-purple-800 opacity-50 text-white rounded-md w-full aria-checked:opacity-90'
                             >
                               Débito
                             </RadioGroup.Item>
@@ -226,7 +226,7 @@ const CartModal = () => {
             </div>
 
             <div className='w-full space-y-6'>
-              <div className='p-3 bg-neutral-700 rounded-md space-y-2'>
+              <div className='p-3 bg-neutral-300 rounded-md space-y-2'>
                 <div className='flex items-center justify-between'>
                   <span className='text-sm'>Total dos produtos</span>
                   <span className='font-bold'>{totalOrderAmountFormatted}</span>

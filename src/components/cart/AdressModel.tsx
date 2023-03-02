@@ -46,9 +46,9 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
     <Dialog.Portal>
       <Dialog.Overlay className='fixed w-screen h-screen inset-0 bg-black opacity-70' />
       <Dialog.Content
-        className='bg-zinc-800 fixed inset-y-14  min-[374px]:right-4 max-w-[360px] w-full rounded-lg
+        className='bg-white fixed inset-y-14  min-[374px]:right-4 max-w-[360px] w-full rounded-lg
                     flex flex-col items-start justify-between px-6 py-6 overflow-auto
-                    scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-600 scrollbar-thumb-rounded-full'
+                    scrollbar-thin scrollbar-thumb-neutral-400 scrollbar-track-neutral-300 scrollbar-thumb-rounded-full'
       >
         <form onSubmit={handleSubmit(getAdrees)}>
           <div className='space-y-10 w-full h-full flex flex-col items-center justify-between '>
@@ -66,7 +66,7 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
                 <small>CEP</small>
                 <input
                   {...register('cep')}
-                  className='bg-neutral-700 w-full rounded-md px-4 py-2'
+                  className='bg-white w-full border border-gray-300 rounded-md px-4 py-2'
                   type='text'
                   placeholder='CEP'
                 />
@@ -81,7 +81,7 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
                 <small>Rua</small>
                 <input
                   {...register('rua')}
-                  className='bg-neutral-700 w-full rounded-md px-4 py-2'
+                  className='bg-white w-full border border-gray-300 rounded-md px-4 py-2'
                   type='text'
                   placeholder='Rua'
                 />
@@ -97,7 +97,7 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
 
                 <input
                   {...register('numero')}
-                  className='bg-neutral-700 w-full rounded-md px-4 py-2'
+                  className='bg-white w-full border border-gray-300 rounded-md px-4 py-2'
                   type='text'
                   placeholder='Numero'
                 />
@@ -113,7 +113,7 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
                 <small>Bairro</small>
                 <input
                   {...register('bairro')}
-                  className='bg-neutral-700 w-full rounded-md px-4 py-2'
+                  className='bg-white w-full border border-gray-300 rounded-md px-4 py-2'
                   type='text'
                   placeholder='Bairro'
                 />
@@ -129,7 +129,7 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
 
                 <input
                   {...register('complemento')}
-                  className='bg-neutral-700 w-full rounded-md px-4 py-2'
+                  className='bg-white w-full border border-gray-300 rounded-md px-4 py-2'
                   type='text'
                   placeholder='Complemento'
                 />
