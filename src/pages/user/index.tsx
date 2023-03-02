@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
 import { prisma } from './../../lib/prisma'
@@ -15,10 +15,10 @@ interface OrdersDetails {
     price_amount: number
     userId: string
     createdAt: string
-  }[]
-  productsOnOrder: {
-    productId: string
-    orderId: string
+    ProductsOnOrder: {
+      productId: string
+      orderId: string
+    }[]
   }[]
 }
 
@@ -35,10 +35,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     where: {
       userId: user?.id,
     },
+    include: {
+      ProductsOnOrder: true,
+    }
   })
   const orders = JSON.parse(JSON.stringify(ordersArray))
 
   const productsOnOrder = await prisma.productsOnOrder.findMany()
+
+  console.log(ordersArray)
+
 
   if (session?.user === undefined) {
     return {
@@ -50,28 +56,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: { orders, productsOnOrder },
+    props: { orders },
   }
 }
 
-const User = ({ orders, productsOnOrder }: OrdersDetails) => {
+const User = ({ orders }: OrdersDetails) => {
   const { data: session } = useSession()
-
-  function groupBy<T>(arr: T[], fn: (item: T) => any) {
-    return arr.reduce<Record<string, T[]>>((prev, curr) => {
-      const groupKey = fn(curr)
-      const group = prev[groupKey] || []
-      group.push(curr)
-      return { ...prev, [groupKey]: group }
-    }, {})
-  }
-
-  const groupProductsByOrders = Object.values(
-    groupBy(productsOnOrder, (item) => item.orderId)
-  )
-
-  console.log(groupProductsByOrders)
-
+  
   return (
     <>
       <Head>
@@ -121,7 +112,13 @@ const User = ({ orders, productsOnOrder }: OrdersDetails) => {
                           {priceFormatter.format(order.price_amount / 100)}
                         </p>
                       </div>
-                      <div></div>
+                      <div>
+                        {order.ProductsOnOrder.map((prod) => {
+                          return (
+                            <p>{prod.productId}</p>
+                          )
+                        })}
+                      </div>
                       <div className='flex items-center justify-center'>
                         <button className='py-2 w-full bg-green-500 rounded-md hover:bg-green-700 transition-all'>
                           Refazer o pedido
