@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { House, DotsThreeVertical } from 'phosphor-react'
+import { House, DotsThreeVertical, Plus } from 'phosphor-react'
 import beer from '@/assets/minibar-black.png'
 import Head from 'next/head'
 import { prisma } from './../../lib/prisma'
@@ -12,6 +12,10 @@ import { priceFormatter } from '@/utils/formatter'
 import { useSession, signOut } from 'next-auth/react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import ProductsOnOrder from '@/components/ProductsOnOrder'
+import { format, parseISO } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
+import * as Dialog from '@radix-ui/react-dialog'
+import OrderDetails from '@/components/orders/OrderDetails'
 
 interface OrdersDetails {
   orders: {
@@ -27,7 +31,6 @@ interface OrdersDetails {
     }[]
   }[]
 }
-
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions)
@@ -141,21 +144,26 @@ const Dashboard = ({ orders }: OrdersDetails) => {
                 >
                   <div className='flex items-start justify-between gap-2 '>
                     <p className='font-semibold text-lg uppercase'>
-                      {order.createdAt}
+                      {format(parseISO(order.createdAt), "d 'de' LLLL", {
+                        locale: ptBR,
+                      })}
                     </p>
                     <p className='font-semibold text-lg'>
                       {priceFormatter.format(order.price_amount / 100)}
                     </p>
                   </div>
                   <div className='flex items-center justify-between'>
-                    <div className="w-full">
-                    {order.ProductsOnOrder.map((prod, index) => {
-                            return <ProductsOnOrder key={index} {...prod}/>
-                          })}
+                    <div className='w-full'>
+                      {order.ProductsOnOrder.map((prod, index) => {
+                        return <ProductsOnOrder key={index} {...prod} />
+                      })}
                     </div>
-                    <button className='p-2 bg-gray-500 hover:bg-gray-700 transition-all text-white rounded-full text-sm'>
-                    <DotsThreeVertical size={22} />
-                    </button>
+                    <Dialog.Root>
+                      <Dialog.Trigger asChild>
+                        <Plus size={22} weight='bold' className='cursor-pointer'/>
+                      </Dialog.Trigger>
+                      <OrderDetails />
+                    </Dialog.Root>
                   </div>
                 </div>
               )
