@@ -17,7 +17,7 @@ const Login = () => {
           </h1>
 
           <button
-            onClick={() => signIn('google', { callbackUrl: '/' })}
+            onClick={() => signIn('google', { callbackUrl: '/home' })}
             className='py-3 px-4 rounded-lg font-semibold bg-transparent border border-red-400 text-red-400 
           transition-all disabled:opacity-25 w-full flex items-center justify-center gap-3'
           >

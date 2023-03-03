@@ -20,21 +20,18 @@ const ProductsOnOrder = ({
 }: ProductsOnOrderProps) => {
   const { products } = useProduct()
 
-  console.log(products)
-  console.log(productId)
-
   return (
-    <div>
+    <>
       {products !== undefined ? (
         products.map((prod: Product) => {
           if (prod.id === productId) {
-            return <p className='text-sm'>{prod.name}</p>
+            return <p  key={productId} className='text-sm'>{prod.name}</p>
           }
         })
       ) : (
         <>Carregando</>
       )}
-    </div>
+    </>
   )
 }
 
