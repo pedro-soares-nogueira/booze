@@ -40,6 +40,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     include: {
       ProductsOnOrder: true,
     },
+    orderBy: {
+      createdAt: 'desc'
+    }
   })
   const orders = JSON.parse(JSON.stringify(ordersArray))
 
@@ -63,7 +66,7 @@ const User = ({ orders }: OrdersDetails) => {
   return (
     <>
       <Head>
-        <title>Booze - Usuário</title>
+        <title>Booze | Usuário - Perfil</title>
         <link rel='icon' href='/minibar-black.png' />
       </Head>
       <main className='flex flex-col items-start justify-center gap-8 py-8 px-4'>

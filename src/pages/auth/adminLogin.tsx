@@ -7,7 +7,7 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>Booze | Login - Usuário</title>
+        <title>Booze | Login - Admin</title>
         <link rel='icon' href='/minibar-black.png' />
       </Head>
       <div className='w-full h-screen flex items-center justify-center'>
@@ -17,7 +17,7 @@ const Login = () => {
           </h1>
 
           <button
-            onClick={() => signIn('google', { callbackUrl: '/home' })}
+            onClick={() => signIn('google', { callbackUrl: '/admin/dashboard' })}
             className='py-3 px-4 rounded-lg font-semibold bg-transparent border border-red-400 text-red-400 
           transition-all disabled:opacity-25 w-full flex items-center justify-center gap-3'
           >

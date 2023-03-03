@@ -39,13 +39,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     include: {
       ProductsOnOrder: true,
     },
+    orderBy: {
+      createdAt: 'desc'
+    }
   })
   const orders = JSON.parse(JSON.stringify(ordersArray))
 
   if (session?.user === undefined) {
     return {
       redirect: {
-        destination: '/auth/login',
+        destination: '/auth/adminLogin',
         permanent: false,
       },
     }
@@ -62,7 +65,7 @@ const Dashboard = ({ orders }: OrdersDetails) => {
   return (
     <>
       <Head>
-        <title>Booze - Admin</title>
+        <title>Booze | Admin - Dashboard</title>
         <link rel='icon' href='/minibar-black.png' />
       </Head>
       <div>
