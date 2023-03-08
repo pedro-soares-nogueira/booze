@@ -99,7 +99,7 @@ const User = ({ orders }: OrdersDetails) => {
               <h2 className='text-lg font-semibold'>Todos os pedidos</h2>
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
                 {orders.length === 0 ? (
-                  <>voce não tem pedidos</>
+                  <>Você ainda não tem pedidos</>
                 ) : (orders.map((order) => {
                   return (
                     <div
