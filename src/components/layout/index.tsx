@@ -3,11 +3,15 @@ import Image from 'next/image'
 import { House, ShoppingCartSimple, User } from 'phosphor-react'
 // https://www.flaticon.com/free-icon/minibar_952723?related_id=952723&origin=search
 import { useCart } from '@/contexts/CartContext'
-import beer from '@/assets/minibar-black.png'
+import beer from '@/assets/booze.svg'
 import * as Dialog from '@radix-ui/react-dialog'
 import CartModal from '../cart/CartModal'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import { googleImageLoader } from '@/utils/googleImageLoader'
+import { GetServerSideProps } from 'next'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 interface Layout {
   children: ReactNode
@@ -16,11 +20,6 @@ interface Layout {
 const Layout = ({ children }: Layout) => {
   const { totalQuantify } = useCart()
   const { data: session, status } = useSession()
-  /* 
-
-  if (status === 'unauthenticated') {
-    return <div className='max-w-[1100px] m-auto'>{children}</div>
-  } */
 
   return (
     <div>
@@ -28,10 +27,11 @@ const Layout = ({ children }: Layout) => {
         <div className='max-w-[1100px] m-auto flex items-center justify-between py-2 px-4'>
           <Image src={beer} width={40} height={40} alt='Logo' />
 
-          <Link href={'/'}>
-            <span className='text-4xl font-semibold text-gray-700'>Booze</span>
+          <Link href={'/home'}>
+            <span className='text-4xl font-bold text-red-600 tracking-wide'>
+              Booze
+            </span>
           </Link>
-
 
           <ul className='flex items-center justify-center gap-3 md:gap-5'>
             <li>
@@ -63,7 +63,7 @@ const Layout = ({ children }: Layout) => {
 
             <li>
               <Link href={'/user'}>
-                <img
+              <img
                   src={session?.user?.image}
                   alt=''
                   className='rounded-full w-9 h-9 flex items-center justify-center'

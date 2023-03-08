@@ -40,8 +40,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       ProductsOnOrder: true,
     },
     orderBy: {
-      createdAt: 'desc'
-    }
+      createdAt: 'desc',
+    },
   })
   const orders = JSON.parse(JSON.stringify(ordersArray))
 
@@ -138,36 +138,43 @@ const Dashboard = ({ orders }: OrdersDetails) => {
             Todos os pedidos
           </h2>
 
-          <div className='w-full space-y-3'>
+          <div className='w-full grid grid-cols-3 gap-2'>
             {orders.map((order) => {
               return (
                 <div
                   key={order.id}
-                  className='p-4 space-y-3 border-b border-gray-300'
+                  className='p-4 space-y-3 border border-gray-300 rounded-md 
+                            flex flex-col items-start justify-between gap-2'
                 >
-                  <div className='flex items-start justify-between gap-2 '>
-                    <p className='font-semibold text-lg uppercase'>
-                      {format(parseISO(order.createdAt), "d 'de' LLLL", {
-                        locale: ptBR,
-                      })}
-                    </p>
-                    <p className='font-semibold text-lg'>
-                      {priceFormatter.format(order.price_amount / 100)}
-                    </p>
-                  </div>
-                  <div className='flex items-center justify-between'>
+                  <div className='w-full'>
+                    <div className='flex items-start justify-between gap-2 w-full'>
+                      <p className='font-semibold text-lg uppercase'>
+                        {format(parseISO(order.createdAt), "d 'de' LLLL", {
+                          locale: ptBR,
+                        })}
+                      </p>
+                      <p className='font-semibold text-lg'>
+                        {priceFormatter.format(order.price_amount / 100)}
+                      </p>
+                    </div>
                     <div className='w-full'>
                       {order.ProductsOnOrder.map((prod, index) => {
                         return <ProductsOnOrder key={index} {...prod} />
                       })}
                     </div>
-                    <Dialog.Root>
-                      <Dialog.Trigger asChild>
-                        <Plus size={22} weight='bold' className='cursor-pointer'/>
-                      </Dialog.Trigger>
-                      <OrderDetails />
-                    </Dialog.Root>
                   </div>
+
+                  <Dialog.Root>
+                    <Dialog.Trigger asChild>
+                      <button
+                        className='disabled:opacity-90 disabled:hover:cursor-not-allowed py-2 w-full rounded-md
+                        text-red-500 hover:text-red-700 transition-all border border-red-500'
+                      >
+                        Ver Mais
+                      </button>
+                    </Dialog.Trigger>
+                    <OrderDetails />
+                  </Dialog.Root>
                 </div>
               )
             })}

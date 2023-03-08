@@ -56,7 +56,7 @@ const ProductCard = (product: ProductProps) => {
           alt='beer glasses'
           fill
           priority
-          className="object-cover"
+          className="object-cover hover:scale-125 transition-all"
           sizes="auto"
 
         />
