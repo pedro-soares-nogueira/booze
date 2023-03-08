@@ -28,7 +28,7 @@ const Login = () => {
     <>
       <Head>
         <title>Booze | Login - Usuário</title>
-        <link rel='icon' href='/minibar-black.png' />
+        <link rel='icon' href='/booze.svg' />
       </Head>
       <div className='w-full h-screen flex items-center justify-center'>
         <div className='space-y-5'>

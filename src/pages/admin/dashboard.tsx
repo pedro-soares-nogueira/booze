@@ -35,17 +35,34 @@ interface OrdersDetails {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions)
 
-  if (session?.user === undefined) {
+  const loggedUser = await prisma.user.findFirst({
+    where: {
+      email: session?.user?.email,
+    },
+  })
+  console.log(loggedUser)
+
+  const ordersArray = await prisma.order.findMany({
+    include: {
+      ProductsOnOrder: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+  const orders = JSON.parse(JSON.stringify(ordersArray))
+
+  if (loggedUser?.isAdmin === false || session?.user === undefined) {
     return {
       redirect: {
         destination: '/auth/adminLogin',
         permanent: false,
       },
     }
-  }
-
-  return {
-    props: { orders },
+  } else {
+    return {
+      props: { orders },
+    }
   }
 }
 
