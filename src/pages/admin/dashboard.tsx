@@ -35,16 +35,6 @@ interface OrdersDetails {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions)
 
-  const ordersArray = await prisma.order.findMany({
-    include: {
-      ProductsOnOrder: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
-  const orders = JSON.parse(JSON.stringify(ordersArray))
-
   if (session?.user === undefined) {
     return {
       redirect: {
