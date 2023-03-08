@@ -12,5 +12,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   secret: 'b4726c800329a95f4d0b6642e7dc02d0',
+  callbacks: {
+    session: async ({session, user}) => {
+      session.user.isAdmin = user.isAdmin 
+      
+      return session
+    }
+  }
 }
 export default NextAuth(authOptions)

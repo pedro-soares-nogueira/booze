@@ -7,11 +7,12 @@ import beer from '@/assets/booze.svg'
 import * as Dialog from '@radix-ui/react-dialog'
 import CartModal from '../cart/CartModal'
 import Link from 'next/link'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { googleImageLoader } from '@/utils/googleImageLoader'
 import { GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 interface Layout {
   children: ReactNode
@@ -61,14 +62,51 @@ const Layout = ({ children }: Layout) => {
               </Dialog.Root>
             </li>
 
-            <li>
-              <Link href={'/user'}>
-              <img
-                  src={session?.user?.image}
-                  alt=''
-                  className='rounded-full w-9 h-9 flex items-center justify-center'
-                />
-              </Link>
+            <li className='flex items-center justify-center'>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger asChild>
+                  <img
+                    src={session?.user?.image}
+                    alt=''
+                    className='rounded-full w-9 h-9 flex items-center justify-center cursor-pointer'
+                  />
+                </DropdownMenu.Trigger>
+
+                <DropdownMenu.Portal>
+                  <DropdownMenu.Content className='border borer-gray-400 rounded-md p-4 mt-1 bg-white shadow-md'>
+                    <div className="flex flex-col gap-2">
+                    <DropdownMenu.Item>
+                      <Link href={'/user'} 
+                       className='block font-bold text-purple-700'>
+                          Meus pedidos
+                      </Link>
+                      </DropdownMenu.Item>
+
+                      <DropdownMenu.Item>
+
+                      {session?.user?.isAdmin && 
+                        <Link href={'/admin/dashboard'} 
+                        className='block font-bold text-purple-700'>
+                            Dashboard
+                        </Link>
+                      }
+                      </DropdownMenu.Item>
+                      <DropdownMenu.Item>
+
+                      
+                      <button
+                        onClick={() => signOut()}
+                        className='py-2 px-12 rounded-lg font-bold bg-purple-700 text-white hover:bg-purple-600 
+                        transition-all disabled:opacity-25 w-full'
+                        >
+                        Sair
+                      </button>
+                          </DropdownMenu.Item>
+                    </div>
+
+                  </DropdownMenu.Content>
+                </DropdownMenu.Portal>
+              </DropdownMenu.Root>
             </li>
           </ul>
         </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { House, DotsThreeVertical, Plus } from 'phosphor-react'
@@ -16,6 +16,7 @@ import ptBR from 'date-fns/locale/pt-BR'
 import * as Dialog from '@radix-ui/react-dialog'
 import OrderDetails from '@/components/orders/OrderDetails'
 import beer from '@/assets/booze.svg'
+import Layout from '@/components/layout'
 
 interface OrdersDetails {
   orders: {
@@ -33,15 +34,6 @@ interface OrdersDetails {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions)
-
-  const loggedUser = await prisma.user.findFirst({
-    where: {
-      email: session?.user?.email,
-    },
-  })
-  console.log(loggedUser)
-
   const ordersArray = await prisma.order.findMany({
     include: {
       ProductsOnOrder: true,
@@ -52,17 +44,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   })
   const orders = JSON.parse(JSON.stringify(ordersArray))
 
-  if (loggedUser?.isAdmin === false || session?.user === undefined) {
-    return {
-      redirect: {
-        destination: '/auth/adminLogin',
-        permanent: false,
-      },
-    }
-  } else {
-    return {
-      props: { orders },
-    }
+  return {
+    props: { orders },
   }
 }
 
@@ -76,7 +59,7 @@ const Dashboard = ({ orders }: OrdersDetails) => {
         <link rel='icon' href='/booze.svg' />
       </Head>
       <div>
-        <nav className='w-full border-b border-gray-300'>
+        {/*         <nav className='w-full border-b border-gray-300'>
           <div className='max-w-[1100px] m-auto flex items-center justify-between py-2 px-4'>
             <Image src={beer} width={40} height={40} alt='Logo' />
             <Link href={'/admin/dashboard'}>
@@ -104,10 +87,14 @@ const Dashboard = ({ orders }: OrdersDetails) => {
 
                   <DropdownMenu.Portal>
                     <DropdownMenu.Content className='border borer-gray-400 rounded-md p-4 mt-1 bg-white shadow-md'>
-                      <DropdownMenu.Item>
+                      <DropdownMenu.Item className="flex flex-col gap-3">
+                        <Link href={'/user'} 
+                          className='block font-bold text-purple-700'>
+                            Perfil
+                        </Link>
                         <button
                           onClick={() => signOut()}
-                          className='mt-3 py-2 px-12 rounded-lg font-bold bg-purple-700 text-white hover:bg-purple-600 
+                          className='py-2 px-12 rounded-lg font-bold bg-purple-700 text-white hover:bg-purple-600 
                                       transition-all disabled:opacity-25 w-full'
                         >
                           Sair
@@ -120,7 +107,7 @@ const Dashboard = ({ orders }: OrdersDetails) => {
             </ul>
           </div>
         </nav>
-
+ */}
         <div className='max-w-[1100px] m-auto flex flex-col items-center justify-between py-10 px-4 gap-10'>
           <h1 className='text-2xl font-semibold text-gray-700'>
             Bem vindo, Boozer admin
@@ -190,6 +177,10 @@ const Dashboard = ({ orders }: OrdersDetails) => {
       </div>
     </>
   )
+}
+
+Dashboard.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>
 }
 
 export default Dashboard
