@@ -2,6 +2,26 @@ import { GoogleLogo } from 'phosphor-react'
 import React from 'react'
 import { signIn } from 'next-auth/react'
 import Head from 'next/head'
+import { GetServerSideProps } from 'next'
+import { authOptions } from './../api/auth/[...nextauth]'
+import { getServerSession } from 'next-auth'
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
+  if (session?.user !== undefined) {
+    return {
+      redirect: {
+        destination: '/home',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}
 
 const Login = () => {
   return (

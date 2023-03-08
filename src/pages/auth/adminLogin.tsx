@@ -2,6 +2,26 @@ import { GoogleLogo } from 'phosphor-react'
 import React from 'react'
 import { signIn } from 'next-auth/react'
 import Head from 'next/head'
+import { GetServerSideProps } from 'next'
+import { authOptions } from './../api/auth/[...nextauth]'
+import { getServerSession } from 'next-auth'
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
+  if (session?.user !== undefined) {
+    return {
+      redirect: {
+        destination: '/admin/dashboard',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}
 
 const Login = () => {
   return (
@@ -13,7 +33,7 @@ const Login = () => {
       <div className='w-full h-screen flex items-center justify-center'>
         <div className='space-y-5'>
           <h1 className='font-semibold text-xl'>
-            Bem vindo, faça login e veja nossos produtos
+            Bem-vindo, administrador. Faça login e gerencie os pedidos
           </h1>
 
           <button

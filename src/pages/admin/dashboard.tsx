@@ -2,7 +2,6 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { House, DotsThreeVertical, Plus } from 'phosphor-react'
-import beer from '@/assets/minibar-black.png'
 import Head from 'next/head'
 import { prisma } from './../../lib/prisma'
 import { GetServerSideProps } from 'next'
@@ -16,6 +15,7 @@ import { format, parseISO } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import * as Dialog from '@radix-ui/react-dialog'
 import OrderDetails from '@/components/orders/OrderDetails'
+import beer from '@/assets/booze.svg'
 
 interface OrdersDetails {
   orders: {
@@ -66,14 +66,14 @@ const Dashboard = ({ orders }: OrdersDetails) => {
     <>
       <Head>
         <title>Booze | Admin - Dashboard</title>
-        <link rel='icon' href='/minibar-black.png' />
+        <link rel='icon' href='/booze.svg' />
       </Head>
       <div>
         <nav className='w-full border-b border-gray-300'>
           <div className='max-w-[1100px] m-auto flex items-center justify-between py-2 px-4'>
             <Image src={beer} width={40} height={40} alt='Logo' />
-            <Link href={'/'}>
-              <span className='text-4xl font-semibold text-gray-700'>
+            <Link href={'/admin/dashboard'}>
+              <span className='text-4xl font-bold text-red-600 tracking-wide'>
                 Booze
               </span>
             </Link>
