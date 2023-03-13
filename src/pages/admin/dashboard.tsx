@@ -59,27 +59,27 @@ const Dashboard = ({ orders }: OrdersDetails) => {
         <link rel="icon" href="/booze.svg" />
       </Head>
       <div>
-        <div className="max-w-[1100px] m-auto flex flex-col items-center justify-between py-10 px-4 gap-10">
-          <h1 className="text-2xl font-semibold text-gray-700">
+        <div className="max-w-[1100px] m-auto flex flex-col items-start justify-between py-10 px-4 gap-10">
+          <h1 className="text-2xl font-semibold text-gray-800">
             Bem vindo, Boozer admin
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-5">
-            <span className="bg-gray-200 rounded-md p-4 w-full space-y-2">
-              <p className="text-md text-gray-700">Pedidos por dia</p>
-              <p className="text-3xl text-gray-700 font-bold">22</p>
+            <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
+              <p className="text-md">Pedidos por dia</p>
+              <p className="text-3xl font-bold">22</p>
             </span>
-            <span className="bg-gray-200 rounded-md p-4 w-full space-y-2">
-              <p className="text-md text-gray-700">Pedidos por dia</p>
-              <p className="text-3xl text-gray-700 font-bold">R$355,80</p>
+            <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
+              <p className="text-md">Pedidos por dia</p>
+              <p className="text-3xl font-bold">R$355,80</p>
             </span>
-            <span className="bg-gray-200 rounded-md p-4 w-full space-y-2">
-              <p className="text-md text-gray-700">Pedidos por periodo</p>
-              <p className="text-3xl text-gray-700 font-bold">R$930,25</p>
+            <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
+              <p className="text-md">Pedidos por periodo</p>
+              <p className="text-3xl font-bold">R$930,25</p>
             </span>
           </div>
 
-          <h2 className="text-2xl font-semibold text-gray-700">
+          <h2 className="text-2xl font-semibold text-gray-800">
             Todos os pedidos
           </h2>
 
@@ -113,7 +113,7 @@ const Dashboard = ({ orders }: OrdersDetails) => {
                     <Dialog.Trigger asChild>
                       <button
                         className="disabled:opacity-90 disabled:hover:cursor-not-allowed py-2 w-full rounded-md
-                        text-red-500 hover:text-red-700 transition-all border border-red-500"
+                        text-[#006E71] hover:opacity-90 transition-all border border-[#006E71]"
                       >
                         Ver Mais
                       </button>

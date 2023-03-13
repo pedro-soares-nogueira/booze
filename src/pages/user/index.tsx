@@ -74,7 +74,7 @@ const User = ({ orders }: OrdersDetails) => {
       </Head>
       <main className="flex flex-col items-start justify-center gap-8 py-8 px-4">
         {session ? (
-          <div className="w-full grid md:grid-cols-4 gap-8 items-start justify-center">
+          <div className="w-full md:grid grid-cols-4 gap-8 items-start justify-center">
             <div className="flex flex-col items-center justify-center gap-2 sticky top-8">
               <UserCircle
                 size={32}
@@ -86,7 +86,7 @@ const User = ({ orders }: OrdersDetails) => {
                 <span className="text-sm">{session.user?.email}</span>
                 <button
                   onClick={() => signOut()}
-                  className="mt-3 py-2 px-4 rounded-lg font-bold border border-red-500 text-red-500 hover:text-red-700 
+                  className="mt-8 py-2 px-4 rounded-lg font-bold border border-[#006E71] text-[#006E71] hover:opacity-90 
                               transition-all disabled:opacity-25 w-full"
                 >
                   Sair
@@ -94,7 +94,7 @@ const User = ({ orders }: OrdersDetails) => {
               </div>
             </div>
 
-            <div className="space-y-4 md:col-span-3">
+            <div className="space-y-4 md:col-span-3 mt-10">
               <h2 className="text-lg font-semibold">Todos os pedidos</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {orders.length === 0 ? (
@@ -133,13 +133,15 @@ const User = ({ orders }: OrdersDetails) => {
                         <div className="flex items-center justify-center w-full">
                           <button
                             disabled
-                            className="disabled:opacity-50 disabled:hover:cursor-not-allowed py-2 w-full bg-red-500 rounded-md hover:bg-red-700 text-white transition-all"
+                            className="disabled:opacity-50 disabled:hover:cursor-not-allowed py-2 w-full 
+                                          bg-[#006E71] rounded-md hover:opacity-90 text-white transition-all"
                           >
                             Refazer
                           </button>
                           <button
                             disabled
-                            className="disabled:opacity-90 disabled:hover:cursor-not-allowed py-2 w-full text-red-500 hover:text-red-700 transition-all"
+                            className="disabled:opacity-90 disabled:hover:cursor-not-allowed py-2 w-full 
+                                          text-[#006E71] hover:opacity-90 transition-all"
                           >
                             Ver Mais
                           </button>

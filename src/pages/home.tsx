@@ -55,18 +55,20 @@ export default function Home({ products }: Product) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/booze.svg" />
       </Head>
-      <main className="flex flex-col items-start justify-center gap-8 py-8 px-4">
-        <h1 className="text-3xl font-bold text-red-600">Bem vindo, Boozer</h1>
+      <main className="flex flex-col items-start justify-center gap-2 py-8 px-4">
+        <h1 className="text-2xl font-bold text-neutral-800">
+          Bem vindo, Boozer
+        </h1>
 
-        <div className="flex flex-wrap items-start justify-start w-full py-8 gap-4">
+        <div className="flex flex-wrap items-start justify-start w-full py-8 gap-2">
           <div
-            className="border border-red-500 text-red-500 hover:text-red-700 rounded-md px-5 py-2 font-semibold cursor-pointer transition-all"
+            className="border border-neutral-400 rounded-full px-5 py-1 cursor-pointer transition-all"
             onClick={() => setFilteredProducts(products)}
           >
             Todos
           </div>
           <div
-            className="border border-red-500 text-red-500 hover:text-red-700 rounded-md px-5 py-2 font-semibold cursor-pointer transition-all"
+            className="border border-neutral-400 rounded-full px-5 py-1 cursor-pointer transition-all"
             onClick={() =>
               filterProductsByCategory("ec049b03-8048-4c21-9680-4dc15ad86ac4")
             }
@@ -74,7 +76,7 @@ export default function Home({ products }: Product) {
             Cervejas
           </div>
           <div
-            className="border border-red-500 text-red-500 hover:text-red-700 rounded-md px-5 py-2 font-semibold cursor-pointer transition-all"
+            className="border border-neutral-400 rounded-full px-5 py-1 cursor-pointer transition-all"
             onClick={() =>
               filterProductsByCategory("d61bd50c-35fc-49c3-916d-00096a00220e")
             }
@@ -82,7 +84,7 @@ export default function Home({ products }: Product) {
             Refrigerantes
           </div>
           <div
-            className="border border-red-500 text-red-500 hover:text-red-700 rounded-md px-5 py-2 font-semibold cursor-pointer transition-all"
+            className="border border-neutral-400 rounded-full px-5 py-1 cursor-pointer transition-all"
             onClick={() =>
               filterProductsByCategory("4e36fcc7-b775-4c65-8971-7f09f0ca42d0")
             }

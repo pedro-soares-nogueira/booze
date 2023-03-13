@@ -4,8 +4,9 @@ import Layout from "@/components/layout"
 import { Inter } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
-import deliveryBro from "@/assets/delivery-man.svg"
+import deliveryBro from "@/assets/beerDay.png"
 import { ArrowRight } from "phosphor-react"
+import { signIn } from "next-auth/react"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -19,23 +20,23 @@ const Landing = () => {
       <div className="max-w-[1100px] m-auto flex flex-col items-center justify-center py-2 px-4 gap-10 md:gap-0 relative">
         <span
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-                      w-full h-full bg-red-50 -z-10 blur-3xl"
+                      w-full h-full bg-[#006E71] -z-10 blur-3xl bg-opacity-10"
         ></span>
         <h1 className="text-7xl font-bold mt-10">Booze</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
           <div className="flex flex-col items-center md:items-start justify-center gap-14">
             <p className="text-5xl leading-[3.5rem] text-center md:text-start lg:text-7xl font-bold md:leading-[4rem] lg:leading-[5.5rem]">
-              Sua entrega o mais rápido possivel!!!
+              Sua bebida o mais rápido possivel!!!
             </p>
 
-            <Link
-              href="/home"
-              className="py-3 px-4 rounded-lg font-semibold bg-transparent border border-red-400 text-red-400 
+            <button
+              onClick={() => signIn("google", { callbackUrl: "/home" })}
+              className="py-3 px-4 rounded-lg font-semibold bg-transparent border border-[#006E71] text-[#006E71] 
                         transition-all disabled:opacity-25 flex items-center justify-center gap-3"
             >
               Entre e veja nossos produtos
               <ArrowRight size={24} />
-            </Link>
+            </button>
           </div>
           <div className="flex items-center justify-center">
             <Image

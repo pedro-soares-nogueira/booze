@@ -2,7 +2,7 @@ import React, { ReactNode } from "react"
 import Image from "next/image"
 import { House, ShoppingCartSimple, User } from "phosphor-react"
 import { useCart } from "@/contexts/CartContext"
-import beer from "@/assets/booze.svg"
+import beer from "@/assets/beerDay.png"
 import * as Dialog from "@radix-ui/react-dialog"
 import CartModal from "../cart/CartModal"
 import Link from "next/link"
@@ -31,12 +31,12 @@ const Layout = ({ children }: Layout) => {
   console.log(userImage)
   return (
     <div className="relative">
-      <nav className="w-full border-b border-gray-300 sticky top-[-2px] bg-white">
+      <nav className="w-full border-b border-gray-300 sticky top-[-2px] bg-[#006E71]">
         <div className="max-w-[1100px] m-auto flex items-center justify-between py-2 px-4">
           <Image src={beer} width={40} height={40} alt="Logo" />
 
           <Link href={"/home"}>
-            <span className="text-4xl font-bold text-red-600 tracking-wide">
+            <span className="text-2xl font-bold text-[#F2CD4B] tracking-wide my-2 block">
               Booze
             </span>
           </Link>
@@ -44,7 +44,7 @@ const Layout = ({ children }: Layout) => {
           <ul className="flex items-center justify-center gap-3 md:gap-5">
             <li>
               <Link href={"/home"}>
-                <House size={32} weight={"fill"} />
+                <House size={24} weight={"fill"} className="text-white" />
               </Link>
             </li>
 
@@ -52,10 +52,14 @@ const Layout = ({ children }: Layout) => {
               <Dialog.Root>
                 <Dialog.Trigger asChild>
                   <div className="cursor-pointer">
-                    <ShoppingCartSimple size={32} weight={"fill"} />
+                    <ShoppingCartSimple
+                      size={24}
+                      weight={"fill"}
+                      className="text-white"
+                    />
                     {totalQuantify ? (
                       <span
-                        className="bg-red-600 text-white rounded-md w-5 h-5 absolute -top-2 text-sm -right-2
+                        className="bg-red-600 text-white rounded-md w-5 h-5 absolute -top-2 text-xs -right-2
                                     font-semibold flex items-center justify-center"
                       >
                         {totalQuantify}
@@ -72,7 +76,11 @@ const Layout = ({ children }: Layout) => {
             <li className="flex items-center justify-center">
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
-                  <User size={32} weight="fill" className="cursor-pointer" />
+                  <User
+                    size={24}
+                    weight="fill"
+                    className="cursor-pointer text-white"
+                  />
                 </DropdownMenu.Trigger>
 
                 <DropdownMenu.Portal>
@@ -81,7 +89,7 @@ const Layout = ({ children }: Layout) => {
                       <DropdownMenu.Item asChild>
                         <Link
                           href={"/user"}
-                          className="block font-bold text-purple-700"
+                          className="block font-bold text-[#006E71] hover:opacity-90"
                         >
                           Meus pedidos
                         </Link>
@@ -91,7 +99,7 @@ const Layout = ({ children }: Layout) => {
                         {session?.user?.isAdmin && (
                           <Link
                             href={"/admin/dashboard"}
-                            className="block font-bold text-purple-700"
+                            className="block font-bold text-[#006E71] hover:opacity-90"
                           >
                             Dashboard
                           </Link>
@@ -100,7 +108,7 @@ const Layout = ({ children }: Layout) => {
                       <DropdownMenu.Item>
                         <button
                           onClick={() => signOut()}
-                          className="py-2 px-12 rounded-lg font-bold bg-purple-700 text-white hover:bg-purple-600 
+                          className="py-2 px-12 rounded-lg font-bold text-white bg-[#006E71] hover:opacity-90 
                         transition-all disabled:opacity-25 w-full"
                         >
                           Sair
