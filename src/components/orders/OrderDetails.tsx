@@ -6,6 +6,7 @@ import ptBR from "date-fns/locale/pt-BR"
 import Tag from "../designSystem/Tag"
 import ProductsOnOrder from "../ProductsOnOrder"
 import { priceFormatter } from "@/utils/formatter"
+import OrderStatusSelect from "./OrderStatusSelect"
 
 interface Order {
   id: string
@@ -34,7 +35,6 @@ interface Order {
 }
 
 const OrderDetails = (order: Order) => {
-  console.log(order)
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed w-screen h-screen inset-0 bg-black opacity-70" />
@@ -64,7 +64,6 @@ const OrderDetails = (order: Order) => {
               })}
             </strong>
             <Tag title={order.orderStatus.title} />
-            Alterar Status do pedido
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
@@ -97,13 +96,12 @@ const OrderDetails = (order: Order) => {
               </div>
             </div>
 
-            <div className="space-y-14  w-full">
+            <div className="space-y-10  w-full">
               <div>
                 {order.ProductsOnOrder.map((prod, index) => {
                   return <ProductsOnOrder key={index} {...prod} />
                 })}
               </div>
-
               <div className="flex items-center justify-between w-full">
                 <p className="text-md">Valor total</p>
                 <p className="text-2xl font-bold">
@@ -111,6 +109,7 @@ const OrderDetails = (order: Order) => {
                   {priceFormatter.format(order.price_amount / 100)}
                 </p>
               </div>
+              <OrderStatusSelect orderId={order.id} />
             </div>
           </div>
         </div>
