@@ -11,34 +11,7 @@ import ProductsOnOrder from "@/components/ProductsOnOrder"
 import { format, parseISO } from "date-fns"
 import ptBR from "date-fns/locale/pt-BR"
 import { UserCircle } from "phosphor-react"
-
-interface OrdersDetails {
-  orders: {
-    id: string
-    payment_mode: string
-    price_amount: number
-    userId: string
-    createdAt: string
-    code: number
-    ProductsOnOrder: {
-      productId: string
-      orderId: string
-      quantify: number
-    }[]
-    orderStatus: {
-      id: string
-      title: string
-    }
-    Adress: {
-      bairro: string
-      complemento?: string
-      cep: string
-      id: string
-      numero: string
-      rua: string
-    }
-  }[]
-}
+import { IOrdersDetails } from "@/interfaces"
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions)
@@ -78,10 +51,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-const User = ({ orders }: OrdersDetails) => {
+const User = ({ orders }: IOrdersDetails) => {
   const { data: session } = useSession()
-
-  console.log(orders)
 
   return (
     <>

@@ -28,7 +28,6 @@ const Layout = ({ children }: Layout) => {
   } else {
     userImage = <User size={32} />
   }
-  console.log(userImage)
   return (
     <div className="relative">
       <nav className="w-full border-b border-gray-300 sticky top-[-2px] bg-[#006E71]">

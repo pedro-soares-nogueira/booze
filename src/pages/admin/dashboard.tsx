@@ -1,42 +1,22 @@
 import React, { ReactElement } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { House, DotsThreeVertical, Plus } from "phosphor-react"
 import Head from "next/head"
 import { prisma } from "./../../lib/prisma"
 import { GetServerSideProps } from "next"
-import { authOptions } from "./../api/auth/[...nextauth]"
-import { getServerSession } from "next-auth"
 import { priceFormatter } from "@/utils/formatter"
-import { useSession, signOut } from "next-auth/react"
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import ProductsOnOrder from "@/components/ProductsOnOrder"
 import { format, parseISO } from "date-fns"
 import ptBR from "date-fns/locale/pt-BR"
 import * as Dialog from "@radix-ui/react-dialog"
 import OrderDetails from "@/components/orders/OrderDetails"
-import beer from "@/assets/booze.svg"
 import Layout from "@/components/layout"
-
-interface OrdersDetails {
-  orders: {
-    id: string
-    payment_mode: string
-    price_amount: number
-    userId: string
-    createdAt: string
-    ProductsOnOrder: {
-      productId: string
-      orderId: string
-      quantify: number
-    }[]
-  }[]
-}
+import { IOrdersDetails } from "@/interfaces"
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const ordersArray = await prisma.order.findMany({
     include: {
       ProductsOnOrder: true,
+      Adress: true,
+      orderStatus: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -49,9 +29,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-const Dashboard = ({ orders }: OrdersDetails) => {
-  const { data: session, status } = useSession()
-
+const Dashboard = ({ orders }: IOrdersDetails) => {
+  console.log(orders)
   return (
     <>
       <Head>
@@ -93,8 +72,22 @@ const Dashboard = ({ orders }: OrdersDetails) => {
                 >
                   <div className="w-full">
                     <div className="flex">
-                      <span className="block text-center px-4 py-1 bg-yellow-300 rounded-md mb-2">
-                        Entrega pendente
+                      <span
+                        className={`block text-center px-4 py-1 rounded-md mb-2 capitalize ${
+                          order.orderStatus.title === "pending" && "bg-red-300"
+                        }
+                        ${
+                          order.orderStatus.title === "delivered" &&
+                          "bg-green-500"
+                        }
+                        ${
+                          order.orderStatus.title === "underway" &&
+                          "bg-yellow-400"
+                        }
+                        
+                        `}
+                      >
+                        {order.orderStatus.title}
                       </span>
                     </div>
                     <div className="flex items-start justify-between gap-2 w-full">
