@@ -75,7 +75,7 @@ const User = ({ orders }: OrdersDetails) => {
       <main className="flex flex-col items-start justify-center gap-8 py-8 px-4">
         {session ? (
           <div className="w-full md:grid grid-cols-4 gap-8 items-start justify-center">
-            <div className="flex flex-col items-center justify-center gap-2 sticky top-8">
+            <div className="flex flex-col items-center justify-center gap-2">
               <UserCircle
                 size={32}
                 weight="light"
@@ -108,6 +108,9 @@ const User = ({ orders }: OrdersDetails) => {
                                 flex flex-col items-start justify-between gap-4"
                       >
                         <div className="flex flex-col items-start justify-center gap-3 w-full">
+                          <span className="block text-center px-4 py-1 bg-yellow-300 rounded-md">
+                            Entrega pendente
+                          </span>
                           <div className="flex items-start justify-between gap-2 w-full">
                             <p className="font-semibold text-lg uppercase">
                               {format(

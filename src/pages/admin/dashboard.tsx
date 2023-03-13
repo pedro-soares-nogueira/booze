@@ -92,6 +92,11 @@ const Dashboard = ({ orders }: OrdersDetails) => {
                             flex flex-col items-start justify-between gap-2"
                 >
                   <div className="w-full">
+                    <div className="flex">
+                      <span className="block text-center px-4 py-1 bg-yellow-300 rounded-md mb-2">
+                        Entrega pendente
+                      </span>
+                    </div>
                     <div className="flex items-start justify-between gap-2 w-full">
                       <p className="font-semibold text-lg uppercase">
                         {format(parseISO(order.createdAt), "d 'de' LLLL", {
