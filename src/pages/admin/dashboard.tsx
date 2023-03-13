@@ -10,6 +10,7 @@ import * as Dialog from "@radix-ui/react-dialog"
 import OrderDetails from "@/components/orders/OrderDetails"
 import Layout from "@/components/layout"
 import { IOrdersDetails } from "@/interfaces"
+import Tag from "@/components/designSystem/Tag"
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const ordersArray = await prisma.order.findMany({
@@ -71,25 +72,7 @@ const Dashboard = ({ orders }: IOrdersDetails) => {
                             flex flex-col items-start justify-between gap-2"
                 >
                   <div className="w-full">
-                    <div className="flex">
-                      <span
-                        className={`block text-center px-4 py-1 rounded-md mb-2 capitalize ${
-                          order.orderStatus.title === "pending" && "bg-red-300"
-                        }
-                        ${
-                          order.orderStatus.title === "delivered" &&
-                          "bg-green-500"
-                        }
-                        ${
-                          order.orderStatus.title === "underway" &&
-                          "bg-yellow-400"
-                        }
-                        
-                        `}
-                      >
-                        {order.orderStatus.title}
-                      </span>
-                    </div>
+                    <Tag title={order.orderStatus.title} />
                     <div className="flex items-start justify-between gap-2 w-full">
                       <p className="font-semibold text-lg uppercase">
                         {format(parseISO(order.createdAt), "d 'de' LLLL", {
@@ -116,7 +99,7 @@ const Dashboard = ({ orders }: IOrdersDetails) => {
                         Ver Mais
                       </button>
                     </Dialog.Trigger>
-                    <OrderDetails />
+                    <OrderDetails {...order} />
                   </Dialog.Root>
                 </div>
               )
