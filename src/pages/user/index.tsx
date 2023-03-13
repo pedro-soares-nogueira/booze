@@ -19,11 +19,24 @@ interface OrdersDetails {
     price_amount: number
     userId: string
     createdAt: string
+    code: number
     ProductsOnOrder: {
       productId: string
       orderId: string
       quantify: number
     }[]
+    orderStatus: {
+      id: string
+      title: string
+    }
+    Adress: {
+      bairro: string
+      complemento?: string
+      cep: string
+      id: string
+      numero: string
+      rua: string
+    }
   }[]
 }
 
@@ -42,6 +55,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
     include: {
       ProductsOnOrder: true,
+      Adress: true,
+      orderStatus: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -65,6 +80,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const User = ({ orders }: OrdersDetails) => {
   const { data: session } = useSession()
+
+  console.log(orders)
 
   return (
     <>
