@@ -31,7 +31,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const Dashboard = ({ orders }: IOrdersDetails) => {
-  console.log(orders)
   return (
     <>
       <Head>

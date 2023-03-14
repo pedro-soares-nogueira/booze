@@ -6,18 +6,24 @@ import { api } from "@/lib/axios"
 import { z } from "zod"
 import * as Select from "@radix-ui/react-select"
 
+interface OrderStatus {
+  id: string
+  title: string
+}
+
 interface OrderStatusSelectProps {
   orderId: string
 }
 
 const OrderStatusType = z.object({
-  orderStatus: z.enum(["pending", "underway", "delivered"]),
+  orderStatus: z.string(),
 })
 
 type OrderStatusInput = z.infer<typeof OrderStatusType>
 
 const OrderStatusSelect = (orderId: OrderStatusSelectProps) => {
-  const [status, setStatus] = useState([])
+  const [status, setStatus] = useState<OrderStatus[]>([])
+
   const { control, handleSubmit } = useForm<OrderStatusInput>({
     resolver: zodResolver(OrderStatusType),
   })
@@ -36,17 +42,14 @@ const OrderStatusSelect = (orderId: OrderStatusSelectProps) => {
   }, [])
 
   const onSubmit = async (data: OrderStatusInput) => {
-    console.log(data.orderStatus)
-    console.log(orderId)
-    /* 
     try {
       await api.patch("/order/handleOrderStatus", {
         status: data.orderStatus,
-        orderId: orderId,
+        orderId: orderId.orderId,
       })
     } catch (error) {
       console.log(error)
-    } */
+    }
   }
 
   return (
@@ -72,29 +75,18 @@ const OrderStatusSelect = (orderId: OrderStatusSelectProps) => {
                   <Select.Content>
                     <Select.Viewport>
                       <Select.Group>
-                        <Select.Item
-                          value="pending"
-                          className="px-4 py-2 rounded-md bg-white cursor-pointer hover:bg-slate-200 transition-all"
-                        >
-                          <Select.ItemText>Pendente</Select.ItemText>
-                          <Select.ItemIndicator />
-                        </Select.Item>
-
-                        <Select.Item
-                          value="underway"
-                          className="px-4 py-2 rounded-md bg-white cursor-pointer hover:bg-slate-200 transition-all"
-                        >
-                          <Select.ItemText>A Caminho</Select.ItemText>
-                          <Select.ItemIndicator />
-                        </Select.Item>
-
-                        <Select.Item
-                          value="delivered"
-                          className="px-4 py-2 rounded-md bg-white cursor-pointer hover:bg-slate-200 transition-all"
-                        >
-                          <Select.ItemText>Entregue</Select.ItemText>
-                          <Select.ItemIndicator />
-                        </Select.Item>
+                        {status.map((item) => {
+                          return (
+                            <Select.Item
+                              key={item.id}
+                              value={item.id}
+                              className="px-4 py-2 rounded-md bg-white cursor-pointer hover:bg-slate-200 transition-all"
+                            >
+                              <Select.ItemText>{item.title}</Select.ItemText>
+                              <Select.ItemIndicator />
+                            </Select.Item>
+                          )
+                        })}
                       </Select.Group>
                     </Select.Viewport>
                   </Select.Content>

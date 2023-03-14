@@ -13,5 +13,5 @@ export default async function handler(
     where: {},
   })
 
-  return res.status(201).json({ ordersStatus })
+  return res.status(201).json(ordersStatus)
 }
