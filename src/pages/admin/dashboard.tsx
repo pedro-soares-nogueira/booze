@@ -14,7 +14,6 @@ import { ordersActions } from "@/reducers/features/ordersSlice"
 const Dashboard = () => {
   const { orders, loading } = useAppSelector((state) => state.orders)
   const dispatch = useAppDispatch()
-  console.log(orders)
 
   useEffect(() => {
     dispatch(ordersActions.fetchOrders())

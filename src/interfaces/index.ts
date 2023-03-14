@@ -33,3 +33,8 @@ export interface IUser {
     isAdmin: boolean
   }
 }
+
+export interface IOrderStatus {
+  id: string
+  title: string
+}

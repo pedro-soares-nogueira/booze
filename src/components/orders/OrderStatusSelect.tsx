@@ -5,11 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { api } from "@/lib/axios"
 import { z } from "zod"
 import * as Select from "@radix-ui/react-select"
-
-interface OrderStatus {
-  id: string
-  title: string
-}
+import { IOrderStatus } from "@/interfaces"
+import { useAppDispatch, useAppSelector } from "@/hooks/useReducer"
+import { ordersActions } from "@/reducers/features/ordersSlice"
 
 interface OrderStatusSelectProps {
   orderId: string
@@ -21,31 +19,18 @@ const OrderStatusType = z.object({
 
 type OrderStatusInput = z.infer<typeof OrderStatusType>
 
-const OrderStatusSelect = (orderId: OrderStatusSelectProps) => {
-  const [status, setStatus] = useState<OrderStatus[]>([])
+const OrderStatusSelect = ({ orderId }: OrderStatusSelectProps) => {
+  const dispatch = useAppDispatch()
 
   const { control, handleSubmit } = useForm<OrderStatusInput>({
     resolver: zodResolver(OrderStatusType),
   })
 
-  const getStatusOrder = async () => {
-    try {
-      const status = await api.get("/order/getAllStatus")
-      setStatus(status.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    getStatusOrder()
-  }, [])
-
   const onSubmit = async (data: OrderStatusInput) => {
     try {
       await api.patch("/order/handleOrderStatus", {
         status: data.orderStatus,
-        orderId: orderId.orderId,
+        orderId: orderId,
       })
     } catch (error) {
       console.log(error)
@@ -75,7 +60,7 @@ const OrderStatusSelect = (orderId: OrderStatusSelectProps) => {
                   <Select.Content>
                     <Select.Viewport>
                       <Select.Group>
-                        {status.map((item) => {
+                        {/* {statusOnOrder.map((item) => {
                           return (
                             <Select.Item
                               key={item.id}
@@ -86,7 +71,7 @@ const OrderStatusSelect = (orderId: OrderStatusSelectProps) => {
                               <Select.ItemIndicator />
                             </Select.Item>
                           )
-                        })}
+                        })} */}
                       </Select.Group>
                     </Select.Viewport>
                   </Select.Content>

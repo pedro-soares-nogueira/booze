@@ -51,7 +51,6 @@ const User = ({ user }: IUser) => {
   }, [dispatch])
 
   const ordersByUser = orders.filter((order) => order.userId === user.id)
-  console.log(orders)
 
   return (
     <>

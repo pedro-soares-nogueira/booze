@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import * as Dialog from "@radix-ui/react-dialog"
 import { X } from "phosphor-react"
 import { format, parseISO } from "date-fns"
@@ -7,34 +7,11 @@ import Tag from "../designSystem/Tag"
 import ProductsOnOrder from "../ProductsOnOrder"
 import { priceFormatter } from "@/utils/formatter"
 import OrderStatusSelect from "./OrderStatusSelect"
+import { IOrdersDetails } from "@/interfaces"
+import { ordersActions } from "@/reducers/features/ordersSlice"
+import { useAppDispatch, useAppSelector } from "@/hooks/useReducer"
 
-interface Order {
-  id: string
-  payment_mode: string
-  price_amount: number
-  userId: string
-  createdAt: string
-  code: number
-  ProductsOnOrder: {
-    productId: string
-    orderId: string
-    quantify: number
-  }[]
-  orderStatus: {
-    id: string
-    title: string
-  }
-  Adress: {
-    bairro: string
-    complemento?: string
-    cep: string
-    id: string
-    numero: string
-    rua: string
-  }
-}
-
-const OrderDetails = (order: Order) => {
+const OrderDetails = (order: IOrdersDetails) => {
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed w-screen h-screen inset-0 bg-black opacity-70" />
