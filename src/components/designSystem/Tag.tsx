@@ -9,10 +9,10 @@ const Tag = ({ title }: TagProps) => {
     <div className="flex">
       <span
         className={`block text-center px-4 py-1 rounded-md mb-2 capitalize ${
-          title === "pending" && "bg-red-300"
+          title === "pendente" && "bg-red-300"
         }
-            ${title === "delivered" && "bg-green-500"}
-            ${title === "underway" && "bg-yellow-400"}
+            ${title === "a caminho" && "bg-green-500"}
+            ${title === "entregue" && "bg-yellow-400"}
                         
         `}
       >
