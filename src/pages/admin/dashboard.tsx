@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react"
+import React, { ReactElement, useEffect, useState } from "react"
 import Head from "next/head"
 import { prisma } from "./../../lib/prisma"
 import { GetServerSideProps } from "next"
@@ -11,26 +11,24 @@ import OrderDetails from "@/components/orders/OrderDetails"
 import Layout from "@/components/layout"
 import { IOrdersDetails } from "@/interfaces"
 import Tag from "@/components/designSystem/Tag"
+import { api } from "@/lib/axios"
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const ordersArray = await prisma.order.findMany({
-    include: {
-      ProductsOnOrder: true,
-      Adress: true,
-      orderStatus: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  })
-  const orders = JSON.parse(JSON.stringify(ordersArray))
+const Dashboard = () => {
+  const [orders, setOrders] = useState<IOrdersDetails[]>([])
 
-  return {
-    props: { orders },
+  const getOrders = async () => {
+    try {
+      const orders = await api.get("/order/gettingAll")
+      setOrders(orders.data.orders)
+    } catch (error) {
+      console.log(error)
+    }
   }
-}
 
-const Dashboard = ({ orders }: IOrdersDetails) => {
+  useEffect(() => {
+    getOrders()
+  }, [])
+
   return (
     <>
       <Head>

@@ -1,5 +1,5 @@
 import Head from "next/head"
-import React, { ReactElement, useEffect } from "react"
+import React, { ReactElement, useEffect, useState } from "react"
 import { useSession, signIn, signOut } from "next-auth/react"
 import { GetServerSideProps } from "next"
 import { prisma } from "./../../lib/prisma"
@@ -12,30 +12,11 @@ import { format, parseISO } from "date-fns"
 import ptBR from "date-fns/locale/pt-BR"
 import { UserCircle } from "phosphor-react"
 import { IOrdersDetails } from "@/interfaces"
+import { api } from "@/lib/axios"
+import Tag from "@/components/designSystem/Tag"
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions)
-
-  const user = await prisma.user.findFirst({
-    where: {
-      email: session?.user?.email,
-    },
-  })
-
-  const ordersArray = await prisma.order.findMany({
-    where: {
-      userId: user?.id,
-    },
-    include: {
-      ProductsOnOrder: true,
-      Adress: true,
-      orderStatus: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  })
-  const orders = JSON.parse(JSON.stringify(ordersArray))
 
   if (session?.user === undefined) {
     return {
@@ -47,12 +28,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: { orders },
+    props: {},
   }
 }
 
-const User = ({ orders }: IOrdersDetails) => {
+const User = () => {
   const { data: session } = useSession()
+
+  const [ordersByUser, setOrdersByUser] = useState<IOrdersDetails[]>([])
+
+  const getOrders = async () => {
+    try {
+      const ordersByUser = await api.get("/order/gettingAllByUser")
+      setOrdersByUser(ordersByUser.data.orders)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getOrders()
+  }, [])
 
   return (
     <>
@@ -85,20 +81,18 @@ const User = ({ orders }: IOrdersDetails) => {
             <div className="space-y-4 md:col-span-3 mt-10">
               <h2 className="text-lg font-semibold">Todos os pedidos</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {orders.length === 0 ? (
+                {ordersByUser.length === 0 ? (
                   <>Você ainda não tem pedidos</>
                 ) : (
-                  orders.map((order) => {
+                  ordersByUser.map((order) => {
                     return (
                       <div
                         key={order.id}
                         className="bg-white border border-gray-300 rounded-md w-full h-full p-4 
                                 flex flex-col items-start justify-between gap-4"
                       >
-                        <div className="flex flex-col items-start justify-center gap-3 w-full">
-                          <span className="block text-center px-4 py-1 bg-yellow-300 rounded-md">
-                            Entrega pendente
-                          </span>
+                        <div className="flex flex-col items-end justify-center gap-3 w-full">
+                          <Tag title={order.orderStatus.title} />
                           <div className="flex items-start justify-between gap-2 w-full">
                             <p className="font-semibold text-lg uppercase">
                               {format(
@@ -119,23 +113,6 @@ const User = ({ orders }: IOrdersDetails) => {
                               return <ProductsOnOrder key={index} {...prod} />
                             })}
                           </div>
-                        </div>
-
-                        <div className="flex items-center justify-center w-full">
-                          <button
-                            disabled
-                            className="disabled:opacity-50 disabled:hover:cursor-not-allowed py-2 w-full 
-                                          bg-[#006E71] rounded-md hover:opacity-90 text-white transition-all"
-                          >
-                            Refazer
-                          </button>
-                          <button
-                            disabled
-                            className="disabled:opacity-90 disabled:hover:cursor-not-allowed py-2 w-full 
-                                          text-[#006E71] hover:opacity-90 transition-all"
-                          >
-                            Ver Mais
-                          </button>
                         </div>
                       </div>
                     )
