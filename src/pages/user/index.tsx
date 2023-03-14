@@ -11,9 +11,11 @@ import ProductsOnOrder from "@/components/ProductsOnOrder"
 import { format, parseISO } from "date-fns"
 import ptBR from "date-fns/locale/pt-BR"
 import { UserCircle } from "phosphor-react"
-import { IOrdersDetails } from "@/interfaces"
+import { IOrdersDetails, IUser } from "@/interfaces"
 import { api } from "@/lib/axios"
 import Tag from "@/components/designSystem/Tag"
+import { useAppDispatch, useAppSelector } from "@/hooks/useReducer"
+import { ordersActions } from "@/reducers/features/ordersSlice"
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions)
@@ -27,34 +29,35 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
+  const user = await prisma.user.findFirst({
+    where: {
+      email: session.user!.email,
+    },
+  })
+
   return {
-    props: {},
+    props: { user },
   }
 }
 
-const User = () => {
+const User = ({ user }: IUser) => {
   const { data: session } = useSession()
 
-  const [ordersByUser, setOrdersByUser] = useState<IOrdersDetails[]>([])
-
-  const getOrders = async () => {
-    try {
-      const ordersByUser = await api.get("/order/gettingAllByUser")
-      setOrdersByUser(ordersByUser.data.orders)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const { orders, loading } = useAppSelector((state) => state.orders)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    getOrders()
-  }, [])
+    dispatch(ordersActions.fetchOrders())
+  }, [dispatch])
+
+  const ordersByUser = orders.filter((order) => order.userId === user.id)
+  console.log(orders)
 
   return (
     <>
       <Head>
         <title>Booze | Usuário - Perfil</title>
-        <link rel="icon" href="/minibar-black.png" />
+        <link rel="icon" href="/beerDay.png" />
       </Head>
       <main className="flex flex-col items-start justify-center gap-8 py-8 px-4">
         {session ? (
@@ -81,7 +84,9 @@ const User = () => {
             <div className="space-y-4 md:col-span-3 mt-10">
               <h2 className="text-lg font-semibold">Todos os pedidos</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {ordersByUser.length === 0 ? (
+                {loading ? (
+                  <p>Carregando</p>
+                ) : ordersByUser.length === 0 ? (
                   <>Você ainda não tem pedidos</>
                 ) : (
                   ordersByUser.map((order) => {

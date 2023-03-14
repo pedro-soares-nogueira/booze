@@ -1,7 +1,5 @@
 import React, { ReactElement, useEffect, useState } from "react"
 import Head from "next/head"
-import { prisma } from "./../../lib/prisma"
-import { GetServerSideProps } from "next"
 import { priceFormatter } from "@/utils/formatter"
 import ProductsOnOrder from "@/components/ProductsOnOrder"
 import { format, parseISO } from "date-fns"
@@ -9,31 +7,24 @@ import ptBR from "date-fns/locale/pt-BR"
 import * as Dialog from "@radix-ui/react-dialog"
 import OrderDetails from "@/components/orders/OrderDetails"
 import Layout from "@/components/layout"
-import { IOrdersDetails } from "@/interfaces"
 import Tag from "@/components/designSystem/Tag"
-import { api } from "@/lib/axios"
+import { useAppDispatch, useAppSelector } from "@/hooks/useReducer"
+import { ordersActions } from "@/reducers/features/ordersSlice"
 
 const Dashboard = () => {
-  const [orders, setOrders] = useState<IOrdersDetails[]>([])
-
-  const getOrders = async () => {
-    try {
-      const orders = await api.get("/order/gettingAll")
-      setOrders(orders.data.orders)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const { orders, loading } = useAppSelector((state) => state.orders)
+  const dispatch = useAppDispatch()
+  console.log(orders)
 
   useEffect(() => {
-    getOrders()
-  }, [])
+    dispatch(ordersActions.fetchOrders())
+  }, [dispatch])
 
   return (
     <>
       <Head>
         <title>Booze | Admin - Dashboard</title>
-        <link rel="icon" href="/booze.svg" />
+        <link rel="icon" href="/beerDay.png" />
       </Head>
       <div>
         <div className="max-w-[1100px] m-auto flex flex-col items-start justify-between py-10 px-4 gap-10">
@@ -61,46 +52,50 @@ const Dashboard = () => {
           </h2>
 
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-2">
-            {orders.map((order) => {
-              return (
-                <div
-                  key={order.id}
-                  className="p-4 space-y-3 border border-gray-300 rounded-md 
+            {loading ? (
+              <p className="md:col-span-3">Carregando...</p>
+            ) : (
+              orders.map((order) => {
+                return (
+                  <div
+                    key={order.id}
+                    className="p-4 space-y-3 border border-gray-300 rounded-md 
                             flex flex-col items-start justify-between gap-2"
-                >
-                  <div className="w-full">
-                    <Tag title={order.orderStatus.title} />
-                    <div className="flex items-start justify-between gap-2 w-full">
-                      <p className="font-semibold text-lg uppercase">
-                        {format(parseISO(order.createdAt), "d 'de' LLLL", {
-                          locale: ptBR,
-                        })}
-                      </p>
-                      <p className="font-semibold text-lg">
-                        {priceFormatter.format(order.price_amount / 100)}
-                      </p>
-                    </div>
+                  >
                     <div className="w-full">
-                      {order.ProductsOnOrder.map((prod, index) => {
-                        return <ProductsOnOrder key={index} {...prod} />
-                      })}
+                      <Tag title={order.orderStatus.title} />
+                      <div className="flex items-start justify-between gap-2 w-full">
+                        <p className="font-semibold text-lg uppercase">
+                          {format(parseISO(order.createdAt), "d 'de' LLLL", {
+                            locale: ptBR,
+                          })}
+                        </p>
+                        <p className="font-semibold text-lg">
+                          {priceFormatter.format(order.price_amount / 100)}
+                        </p>
+                      </div>
+                      <div className="w-full">
+                        {order.ProductsOnOrder.map((prod, index) => {
+                          return <ProductsOnOrder key={index} {...prod} />
+                        })}
+                      </div>
                     </div>
-                  </div>
 
-                  <Dialog.Root>
-                    <Dialog.Trigger asChild>
-                      <button
-                        className="disabled:opacity-90 disabled:hover:cursor-not-allowed py-2 w-full rounded-md
+                    <Dialog.Root>
+                      <Dialog.Trigger asChild>
+                        <button
+                          className="disabled:opacity-90 disabled:hover:cursor-not-allowed py-2 w-full rounded-md
                         text-[#006E71] hover:opacity-90 transition-all border border-[#006E71]"
-                      >
-                        Ver Mais
-                      </button>
-                    </Dialog.Trigger>
-                    <OrderDetails {...order} />
-                  </Dialog.Root>
-                </div>
-              )
-            })}
+                        >
+                          Ver Mais
+                        </button>
+                      </Dialog.Trigger>
+                      <OrderDetails {...order} />
+                    </Dialog.Root>
+                  </div>
+                )
+              })
+            )}
           </div>
         </div>
       </div>

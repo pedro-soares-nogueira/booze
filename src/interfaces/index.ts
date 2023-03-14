@@ -23,3 +23,13 @@ export interface IOrdersDetails {
     rua: string
   }
 }
+
+export interface IUser {
+  user: {
+    name: string
+    id: string
+    email: string
+    image: string
+    isAdmin: boolean
+  }
+}

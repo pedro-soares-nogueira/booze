@@ -1,13 +1,15 @@
-import Layout from '@/components/layout'
-import { CartProvider } from '@/contexts/CartContext'
-import { OrderProvider } from '@/contexts/OrderContext'
-import type { AppProps } from 'next/app'
-import { SessionProvider } from 'next-auth/react'
-import '@/styles/globals.css'
-import { Session } from 'next-auth'
-import { NextPage } from 'next'
-import { ReactElement, ReactNode } from 'react'
-import { ProductProvider } from '@/contexts/ProductContext'
+import Layout from "@/components/layout"
+import { CartProvider } from "@/contexts/CartContext"
+import { OrderProvider } from "@/contexts/OrderContext"
+import type { AppProps } from "next/app"
+import { SessionProvider } from "next-auth/react"
+import "@/styles/globals.css"
+import { Session } from "next-auth"
+import { NextPage } from "next"
+import { ReactElement, ReactNode } from "react"
+import { ProductProvider } from "@/contexts/ProductContext"
+import { Provider } from "react-redux"
+import { store } from "@/reducers/store"
 
 type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -28,7 +30,9 @@ export default function App({
       <ProductProvider>
         <CartProvider>
           <OrderProvider>
-            {getLayout(<Component {...pageProps} />)}
+            <Provider store={store}>
+              {getLayout(<Component {...pageProps} />)}
+            </Provider>
           </OrderProvider>
         </CartProvider>
       </ProductProvider>

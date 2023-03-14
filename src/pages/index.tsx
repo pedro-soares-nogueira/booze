@@ -15,7 +15,7 @@ const Landing = () => {
     <>
       <Head>
         <title>Booze - Bebidas Online</title>
-        <link rel="icon" href="/booze.svg" />
+        <link rel="icon" href="/beerDay.png" />
       </Head>
       <div className="max-w-[1100px] m-auto flex flex-col items-center justify-center py-2 px-4 gap-10 md:gap-0 relative">
         <span
