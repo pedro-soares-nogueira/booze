@@ -36,6 +36,29 @@ const fetchStatusOnOrder = createAsyncThunk(
   }
 )
 
+interface newStatusOrder {
+  statusId: string
+  orderId: string
+}
+
+const editStatusOrder = createAsyncThunk(
+  "order/editStatusOrder",
+  async ({ statusId, orderId }: newStatusOrder, thunkApi) => {
+    console.log(statusId + " - " + orderId)
+    try {
+      const response = await api.patch("/order/handleOrderStatus", {
+        status: statusId,
+        orderId: orderId,
+      })
+      const data = response.data
+
+      return { data }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+)
+
 export const orderSlice = createSlice({
   name: "orders",
   initialState,
@@ -61,8 +84,38 @@ export const orderSlice = createSlice({
     builder.addCase(fetchStatusOnOrder.rejected, () => {
       console.log("ExtraReducer - rejected")
     })
+    builder.addCase(editStatusOrder.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(editStatusOrder.fulfilled, (state, action) => {
+      console.log(
+        state.orders.map((order) => {
+          if (order.id === action.payload?.data.newOrder.id) {
+            return action.payload?.data.newOrder
+          }
+          return order
+        })
+      )
+      //console.log(action.payload?.data.newOrder)
+      console.log(state)
+
+      state.loading = false
+      state.orders.map((order) => {
+        if (order.id === action.payload?.data.newOrder.id) {
+          return action.payload?.data.newOrder
+        }
+        return order
+      })
+    })
+    builder.addCase(editStatusOrder.rejected, () => {
+      console.log("ExtraReducer - rejected")
+    })
   },
 })
 
-export const ordersActions = { fetchOrders, fetchStatusOnOrder }
+export const ordersActions = {
+  fetchOrders,
+  fetchStatusOnOrder,
+  editStatusOrder,
+}
 export default orderSlice.reducer

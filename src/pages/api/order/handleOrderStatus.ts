@@ -11,12 +11,12 @@ export default async function handler(
 
   const { orderId, status } = req.body
 
-  const newStatus = await prisma.order.update({
+  const newOrder = await prisma.order.update({
     where: {
       id: orderId,
     },
     data: { orderStatusId: status },
   })
 
-  return res.status(201).json({ newStatus })
+  return res.status(201).json({ newOrder })
 }

@@ -20,6 +20,8 @@ const OrderStatusType = z.object({
 type OrderStatusInput = z.infer<typeof OrderStatusType>
 
 const OrderStatusSelect = ({ orderId }: OrderStatusSelectProps) => {
+  const dispatch = useAppDispatch()
+
   const { statusOnOrder } = useAppSelector((state) => state.orders)
   console.log(statusOnOrder)
 
@@ -28,14 +30,8 @@ const OrderStatusSelect = ({ orderId }: OrderStatusSelectProps) => {
   })
 
   const onSubmit = async (data: OrderStatusInput) => {
-    try {
-      await api.patch("/order/handleOrderStatus", {
-        status: data.orderStatus,
-        orderId: orderId,
-      })
-    } catch (error) {
-      console.log(error)
-    }
+    const statusId = data.orderStatus
+    dispatch(ordersActions.editStatusOrder({ statusId, orderId }))
   }
 
   return (
