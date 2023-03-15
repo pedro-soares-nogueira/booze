@@ -20,7 +20,8 @@ const OrderStatusType = z.object({
 type OrderStatusInput = z.infer<typeof OrderStatusType>
 
 const OrderStatusSelect = ({ orderId }: OrderStatusSelectProps) => {
-  const dispatch = useAppDispatch()
+  const { statusOnOrder } = useAppSelector((state) => state.orders)
+  console.log(statusOnOrder)
 
   const { control, handleSubmit } = useForm<OrderStatusInput>({
     resolver: zodResolver(OrderStatusType),
@@ -52,7 +53,10 @@ const OrderStatusSelect = ({ orderId }: OrderStatusSelectProps) => {
             return (
               <Select.Root onValueChange={field.onChange} value={field.value}>
                 <Select.Trigger className="px-4 py-2 rounded-md border border-gray-500">
-                  <Select.Value placeholder="Alterar o status" />
+                  <Select.Value
+                    placeholder="Alterar o status"
+                    className="capitalize"
+                  />
                   <Select.Icon />
                 </Select.Trigger>
 
@@ -60,18 +64,18 @@ const OrderStatusSelect = ({ orderId }: OrderStatusSelectProps) => {
                   <Select.Content>
                     <Select.Viewport>
                       <Select.Group>
-                        {/* {statusOnOrder.map((item) => {
+                        {statusOnOrder.map((item) => {
                           return (
                             <Select.Item
                               key={item.id}
                               value={item.id}
-                              className="px-4 py-2 rounded-md bg-white cursor-pointer hover:bg-slate-200 transition-all"
+                              className="px-4 py-2 rounded-md bg-white cursor-pointer hover:bg-slate-200 transition-all capitalize"
                             >
                               <Select.ItemText>{item.title}</Select.ItemText>
                               <Select.ItemIndicator />
                             </Select.Item>
                           )
-                        })} */}
+                        })}
                       </Select.Group>
                     </Select.Viewport>
                   </Select.Content>

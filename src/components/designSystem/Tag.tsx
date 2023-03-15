@@ -11,8 +11,8 @@ const Tag = ({ title }: TagProps) => {
         className={`block text-center px-4 py-1 rounded-md mb-2 capitalize ${
           title === "pendente" && "bg-red-300"
         }
-            ${title === "a caminho" && "bg-green-500"}
-            ${title === "entregue" && "bg-yellow-400"}
+            ${title === "a caminho" && "bg-yellow-500"}
+            ${title === "entregue" && "bg-green-400"}
                         
         `}
       >

@@ -17,6 +17,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(ordersActions.fetchOrders())
+    dispatch(ordersActions.fetchStatusOnOrder())
   }, [dispatch])
 
   return (
