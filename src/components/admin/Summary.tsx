@@ -9,6 +9,7 @@ import { format } from "date-fns"
 import { priceFormatter } from "@/utils/formatter"
 import { parseISO, isAfter } from "date-fns"
 import { IOrdersDetails } from "@/interfaces"
+import Tag from "../designSystem/Tag"
 
 const Summary = () => {
   const { orders } = useAppSelector((state) => state.orders)
@@ -18,6 +19,7 @@ const Summary = () => {
 
   const summaryOrders =
     filteredOrders.length > 0 ? filteredOrders.length : orders.length
+
   const summaryAmount =
     filteredOrders.length > 0
       ? filteredOrders.reduce((amount, order) => amount + order.price_amount, 0)
