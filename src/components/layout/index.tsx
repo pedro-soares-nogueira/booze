@@ -104,6 +104,18 @@ const Layout = ({ children }: Layout) => {
                           </Link>
                         )}
                       </DropdownMenu.Item>
+
+                      <DropdownMenu.Item>
+                        {session?.user?.isAdmin && (
+                          <Link
+                            href={"/admin/products"}
+                            className="block font-bold text-[#006E71] hover:opacity-90"
+                          >
+                            Produtos
+                          </Link>
+                        )}
+                      </DropdownMenu.Item>
+
                       <DropdownMenu.Item>
                         <button
                           onClick={() => signOut()}

@@ -80,131 +80,127 @@ const Dashboard = () => {
         <title>Booze | Admin - Dashboard</title>
         <link rel="icon" href="/beerDay.png" />
       </Head>
-      <div>
-        <div className="max-w-[1100px] m-auto flex flex-col items-start justify-between py-10 px-4 gap-8">
-          <h1 className="text-2xl font-semibold text-gray-800">
-            Bem vindo, Boozer admin
-          </h1>
+      <div className="max-w-[1100px] m-auto flex flex-col items-start justify-between py-10 px-4 gap-8">
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Bem vindo, Boozer admin
+        </h1>
 
-          <div className="w-full flex flex-col items-start md:items-end space-y-5 border border-gray-300 p-4 rounded-md">
-            <p className=" w-full">
-              Selecione a data e veja detalhes dos pedidos por periodo
-            </p>
-            <form className="flex flex-col md:flex-row items-center justify-start text-center gap-2 md:gap-5 w-full">
-              <DatePicker
-                selected={initialDate}
-                dateFormat="dd/MM/yyyy"
-                locale={ptBR}
-                onChange={(date) => setInitialDate(date)}
-                className="text-black w-full border border-gray-300 rounded-md px-4 py-2"
-              />
-              <p>até</p>
-              <DatePicker
-                selected={finalDate}
-                dateFormat="dd/MM/yyyy"
-                locale={ptBR}
-                onChange={(date) => setFinalDate(date)}
-                className="bg-white w-full border border-gray-300 rounded-md px-4 py-2"
-              />
-
-              <button
-                onClick={(e) => filterByDate(e)}
-                className="py-[8px] px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
-                transition-all disabled:opacity-25 w-full max-w-[12rem]"
-              >
-                Filtrar
-              </button>
-            </form>
-            <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
-              <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
-                <p className="text-md">Pedidos do periodo</p>
-                <p className="text-3xl font-bold">{summaryOrders}</p>
-              </span>
-              <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
-                <p className="text-md">Total do periodo</p>
-                <p className="text-3xl font-bold">
-                  {priceFormatter.format(summaryAmount / 100)}
-                </p>
-              </span>
-            </div>
-
-            <div className="space-y-5 w-full">
-              <p>Selecione o status para filtrar</p>
-
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-start gap-4">
-                {statusOnOrder.map((status) => {
-                  return (
-                    <button
-                      key={status.id}
-                      onClick={(e) => ordersByStatus(status.id)}
-                    >
-                      <Tag title={status.title} />
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
+        <div className="w-full flex flex-col items-start md:items-end space-y-5 border border-gray-300 p-4 rounded-md">
+          <p className=" w-full">
+            Selecione a data e veja detalhes dos pedidos por periodo
+          </p>
+          <form className="flex flex-col md:flex-row items-center justify-start text-center gap-2 md:gap-5 w-full">
+            <DatePicker
+              selected={initialDate}
+              dateFormat="dd/MM/yyyy"
+              locale={ptBR}
+              onChange={(date) => setInitialDate(date)}
+              className="text-black w-full border border-gray-300 rounded-md px-4 py-2"
+            />
+            <p>até</p>
+            <DatePicker
+              selected={finalDate}
+              dateFormat="dd/MM/yyyy"
+              locale={ptBR}
+              onChange={(date) => setFinalDate(date)}
+              className="bg-white w-full border border-gray-300 rounded-md px-4 py-2"
+            />
 
             <button
-              onClick={(e) => resetFilters()}
-              className="py-[10px] px-4 rounded-lg font-bold bg-gray-400 text-white hover:bg-gray-500 
+              onClick={(e) => filterByDate(e)}
+              className="py-[8px] px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
                 transition-all disabled:opacity-25 w-full max-w-[12rem]"
             >
-              Limpar Filtros
+              Filtrar
             </button>
+          </form>
+          <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
+            <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
+              <p className="text-md">Pedidos do periodo</p>
+              <p className="text-3xl font-bold">{summaryOrders}</p>
+            </span>
+            <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
+              <p className="text-md">Total do periodo</p>
+              <p className="text-3xl font-bold">
+                {priceFormatter.format(summaryAmount / 100)}
+              </p>
+            </span>
           </div>
 
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Seus pedidos:
-          </h2>
+          <div className="space-y-5 w-full">
+            <p>Selecione o status para filtrar</p>
 
-          <div className="w-full grid grid-cols-1 md:grid-cols-1 gap-2">
-            {loading ? (
-              <p className="md:col-span-3">Carregando...</p>
-            ) : (
-              renderOrders.map((order) => {
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-start gap-4">
+              {statusOnOrder.map((status) => {
                 return (
-                  <div
-                    key={order.id}
-                    className="border border-gray-300 rounded-md p-2
-                    grid grid-cols-3 md:grid-cols-5 gap-4 items-center justify-center"
+                  <button
+                    key={status.id}
+                    onClick={(e) => ordersByStatus(status.id)}
                   >
-                    <Tag title={order.orderStatus.title} />
-
-                    <p className="text-md">
-                      {format(parseISO(order.createdAt), "d 'de' LLLL", {
-                        locale: ptBR,
-                      })}
-                    </p>
-
-                    <p className="font-semibold text-lg">
-                      {priceFormatter.format(order.price_amount / 100)}
-                    </p>
-
-                    <div className="w-full">
-                      {order.ProductsOnOrder.map((prod, index) => {
-                        return <ProductsOnOrder key={index} {...prod} />
-                      })}
-                    </div>
-
-                    <div className="flex w-full justify-end items-center">
-                      <Dialog.Root>
-                        <Dialog.Trigger asChild>
-                          <button
-                            className="p-1 disabled:opacity-90 disabled:hover:cursor-not-allowed rounded-full
-                              text-[#006E71] hover:opacity-90 transition-all border border-[#006E71]"
-                          >
-                            <Plus size={24} />
-                          </button>
-                        </Dialog.Trigger>
-                        <OrderDetails {...order} />
-                      </Dialog.Root>
-                    </div>
-                  </div>
+                    <Tag title={status.title} />
+                  </button>
                 )
-              })
-            )}
+              })}
+            </div>
           </div>
+
+          <button
+            onClick={(e) => resetFilters()}
+            className="py-[10px] px-4 rounded-lg font-bold bg-gray-400 text-white hover:bg-gray-500 
+                transition-all disabled:opacity-25 w-full max-w-[12rem]"
+          >
+            Limpar Filtros
+          </button>
+        </div>
+
+        <h2 className="text-2xl font-semibold text-gray-800">Seus pedidos:</h2>
+
+        <div className="w-full grid grid-cols-1 md:grid-cols-1 gap-2">
+          {loading ? (
+            <p className="md:col-span-3">Carregando...</p>
+          ) : (
+            renderOrders.map((order) => {
+              return (
+                <div
+                  key={order.id}
+                  className="border border-gray-300 rounded-md p-2
+                    grid grid-cols-3 md:grid-cols-5 gap-4 items-center justify-center"
+                >
+                  <Tag title={order.orderStatus.title} />
+
+                  <p className="text-md">
+                    {format(parseISO(order.createdAt), "d 'de' LLLL", {
+                      locale: ptBR,
+                    })}
+                  </p>
+
+                  <p className="font-semibold text-lg">
+                    {priceFormatter.format(order.price_amount / 100)}
+                  </p>
+
+                  <div className="w-full">
+                    {order.ProductsOnOrder.map((prod, index) => {
+                      return <ProductsOnOrder key={index} {...prod} />
+                    })}
+                  </div>
+
+                  <div className="flex w-full justify-end items-center">
+                    <Dialog.Root>
+                      <Dialog.Trigger asChild>
+                        <button
+                          className="p-1 disabled:opacity-90 disabled:hover:cursor-not-allowed rounded-full
+                              text-[#006E71] hover:opacity-90 transition-all border border-[#006E71]"
+                        >
+                          <Plus size={24} />
+                        </button>
+                      </Dialog.Trigger>
+                      <OrderDetails {...order} />
+                    </Dialog.Root>
+                  </div>
+                </div>
+              )
+            })
+          )}
         </div>
       </div>
     </>
