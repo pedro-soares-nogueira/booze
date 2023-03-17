@@ -12,6 +12,11 @@ export default async function handler(
   const { orderId, status } = req.body
 
   const newOrder = await prisma.order.update({
+    include: {
+      ProductsOnOrder: true,
+      Adress: true,
+      orderStatus: true,
+    },
     where: {
       id: orderId,
     },

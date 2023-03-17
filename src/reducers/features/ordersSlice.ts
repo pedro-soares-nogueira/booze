@@ -10,6 +10,7 @@ export interface OrdersType {
 
 const initialState = {
   orders: [],
+
   statusOnOrder: [],
   loading: false,
 } as OrdersType
@@ -44,7 +45,6 @@ interface newStatusOrder {
 const editStatusOrder = createAsyncThunk(
   "order/editStatusOrder",
   async ({ statusId, orderId }: newStatusOrder, thunkApi) => {
-    console.log(statusId + " - " + orderId)
     try {
       const response = await api.patch("/order/handleOrderStatus", {
         status: statusId,
@@ -88,19 +88,8 @@ export const orderSlice = createSlice({
       state.loading = true
     })
     builder.addCase(editStatusOrder.fulfilled, (state, action) => {
-      console.log(
-        state.orders.map((order) => {
-          if (order.id === action.payload?.data.newOrder.id) {
-            return action.payload?.data.newOrder
-          }
-          return order
-        })
-      )
-      //console.log(action.payload?.data.newOrder)
-      console.log(state)
-
       state.loading = false
-      state.orders.map((order) => {
+      state.orders = state.orders.map((order) => {
         if (order.id === action.payload?.data.newOrder.id) {
           return action.payload?.data.newOrder
         }

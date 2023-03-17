@@ -23,7 +23,6 @@ const OrderStatusSelect = ({ orderId }: OrderStatusSelectProps) => {
   const dispatch = useAppDispatch()
 
   const { statusOnOrder } = useAppSelector((state) => state.orders)
-  console.log(statusOnOrder)
 
   const { control, handleSubmit } = useForm<OrderStatusInput>({
     resolver: zodResolver(OrderStatusType),
