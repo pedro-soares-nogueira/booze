@@ -10,6 +10,7 @@ import Layout from "@/components/layout"
 import Tag from "@/components/designSystem/Tag"
 import { useAppDispatch, useAppSelector } from "@/hooks/useReducer"
 import { ordersActions } from "@/reducers/features/ordersSlice"
+import Summary from "@/components/admin/Summary"
 
 const Dashboard = () => {
   const { orders, loading } = useAppSelector((state) => state.orders)
@@ -32,20 +33,7 @@ const Dashboard = () => {
             Bem vindo, Boozer admin
           </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-5">
-            <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
-              <p className="text-md">Pedidos por dia</p>
-              <p className="text-3xl font-bold">22</p>
-            </span>
-            <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
-              <p className="text-md">Pedidos por dia</p>
-              <p className="text-3xl font-bold">R$355,80</p>
-            </span>
-            <span className="bg-[#006E71] bg-opacity-20 rounded-md p-4 w-full space-y-2 text-gray-800">
-              <p className="text-md">Pedidos por periodo</p>
-              <p className="text-3xl font-bold">R$930,25</p>
-            </span>
-          </div>
+          <Summary />
 
           <h2 className="text-2xl font-semibold text-gray-800">
             Todos os pedidos
