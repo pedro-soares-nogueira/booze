@@ -13,6 +13,7 @@ import { ordersActions } from "@/reducers/features/ordersSlice"
 import Summary from "@/components/admin/Summary"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+import { Plus } from "phosphor-react"
 
 const Dashboard = () => {
   const { orders, loading, statusOnOrder } = useAppSelector(
@@ -157,7 +158,7 @@ const Dashboard = () => {
             Seus pedidos:
           </h2>
 
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-2">
+          <div className="w-full grid grid-cols-1 md:grid-cols-1 gap-2">
             {loading ? (
               <p className="md:col-span-3">Carregando...</p>
             ) : (
@@ -165,39 +166,40 @@ const Dashboard = () => {
                 return (
                   <div
                     key={order.id}
-                    className="p-4 space-y-3 border border-gray-300 rounded-md 
-                            flex flex-col items-start justify-between gap-2"
+                    className="border border-gray-300 rounded-md p-2
+                    grid grid-cols-3 md:grid-cols-5 gap-4 items-center justify-center"
                   >
+                    <Tag title={order.orderStatus.title} />
+
+                    <p className="text-md">
+                      {format(parseISO(order.createdAt), "d 'de' LLLL", {
+                        locale: ptBR,
+                      })}
+                    </p>
+
+                    <p className="font-semibold text-lg">
+                      {priceFormatter.format(order.price_amount / 100)}
+                    </p>
+
                     <div className="w-full">
-                      <Tag title={order.orderStatus.title} />
-                      <div className="flex items-start justify-between gap-2 w-full">
-                        <p className="font-semibold text-lg uppercase">
-                          {format(parseISO(order.createdAt), "d 'de' LLLL", {
-                            locale: ptBR,
-                          })}
-                        </p>
-                        <p className="font-semibold text-lg">
-                          {priceFormatter.format(order.price_amount / 100)}
-                        </p>
-                      </div>
-                      <div className="w-full">
-                        {order.ProductsOnOrder.map((prod, index) => {
-                          return <ProductsOnOrder key={index} {...prod} />
-                        })}
-                      </div>
+                      {order.ProductsOnOrder.map((prod, index) => {
+                        return <ProductsOnOrder key={index} {...prod} />
+                      })}
                     </div>
 
-                    <Dialog.Root>
-                      <Dialog.Trigger asChild>
-                        <button
-                          className="disabled:opacity-90 disabled:hover:cursor-not-allowed py-2 w-full rounded-md
-                        text-[#006E71] hover:opacity-90 transition-all border border-[#006E71]"
-                        >
-                          Ver Mais
-                        </button>
-                      </Dialog.Trigger>
-                      <OrderDetails {...order} />
-                    </Dialog.Root>
+                    <div className="flex w-full justify-end items-center">
+                      <Dialog.Root>
+                        <Dialog.Trigger asChild>
+                          <button
+                            className="p-1 disabled:opacity-90 disabled:hover:cursor-not-allowed rounded-full
+                              text-[#006E71] hover:opacity-90 transition-all border border-[#006E71]"
+                          >
+                            <Plus size={24} />
+                          </button>
+                        </Dialog.Trigger>
+                        <OrderDetails {...order} />
+                      </Dialog.Root>
+                    </div>
                   </div>
                 )
               })
