@@ -85,11 +85,11 @@ const Dashboard = () => {
             Bem vindo, Boozer admin
           </h1>
 
-          <div className="w-full flex flex-col items-end space-y-5 border border-gray-300 p-4 rounded-md">
+          <div className="w-full flex flex-col items-start md:items-end space-y-5 border border-gray-300 p-4 rounded-md">
             <p className=" w-full">
               Selecione a data e veja detalhes dos pedidos por periodo
             </p>
-            <form className="flex items-center justify-start text-center gap-5 w-full">
+            <form className="flex flex-col md:flex-row items-center justify-start text-center gap-2 md:gap-5 w-full">
               <DatePicker
                 selected={initialDate}
                 dateFormat="dd/MM/yyyy"
@@ -108,7 +108,7 @@ const Dashboard = () => {
 
               <button
                 onClick={(e) => filterByDate(e)}
-                className="py-[10px] px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
+                className="py-[8px] px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
                 transition-all disabled:opacity-25 w-full max-w-[12rem]"
               >
                 Filtrar
@@ -130,7 +130,7 @@ const Dashboard = () => {
             <div className="space-y-5 w-full">
               <p>Selecione o status para filtrar</p>
 
-              <div className="flex items-center justify-start gap-4">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-start gap-4">
                 {statusOnOrder.map((status) => {
                   return (
                     <button
