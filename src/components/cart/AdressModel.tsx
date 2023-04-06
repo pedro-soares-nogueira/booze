@@ -1,12 +1,14 @@
 import * as Dialog from "@radix-ui/react-dialog"
 import { X } from "phosphor-react"
-import React, { Dispatch, SetStateAction, useState } from "react"
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useOrder } from "@/contexts/OrderContext"
 import * as RadioGroup from "@radix-ui/react-radio-group"
 import * as Accordion from "@radix-ui/react-accordion"
+import { api } from "@/lib/axios"
+import { useSession } from "next-auth/react"
 
 interface AdreesModel {
   setIsAdreesModelOpen: Dispatch<SetStateAction<boolean>>
@@ -24,6 +26,7 @@ type AdreesInputs = z.infer<typeof AdreesType>
 
 const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
   const { getOrderAdrees, orderAdrees } = useOrder()
+  const { data: session } = useSession()
 
   const {
     handleSubmit,
@@ -46,6 +49,22 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
     setIsAdreesModelOpen(false)
   }
 
+  const fetchAddressByUser = async () => {
+    const userEmail = session?.user?.email
+    console.log(userEmail)
+
+    try {
+      const userAddress = await api.get(`/address/getUserAddress/${userEmail}`)
+      console.log(userAddress)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchAddressByUser()
+  }, [])
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed w-screen h-screen inset-0 bg-black opacity-70" />
@@ -54,7 +73,7 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
                     flex flex-col items-start justify-between px-6 py-6 overflow-auto
                     scrollbar-thin scrollbar-thumb-neutral-400 scrollbar-track-neutral-300 scrollbar-thumb-rounded-full"
       >
-        <form onSubmit={handleSubmit(getAdrees)}>
+        <div>
           <div className="space-y-10 w-full h-full flex flex-col items-center justify-between ">
             <div className="flex items-center justify-between w-full">
               <Dialog.Title className="text-2xl font-semibold">
@@ -209,7 +228,7 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
                   </div>
 
                   <button
-                    type="submit"
+                    onClick={handleSubmit(getAdrees)}
                     className="py-3 px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
                                 transition-all disabled:opacity-25 w-full"
                   >
@@ -219,7 +238,7 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
               </Accordion.Item>
             </Accordion.Root>
           </div>
-        </form>
+        </div>
       </Dialog.Content>
     </Dialog.Portal>
   )
