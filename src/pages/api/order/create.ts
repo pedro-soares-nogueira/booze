@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from "@/lib/prisma"
+import type { NextApiRequest, NextApiResponse } from "next"
 
 interface ProductsOnOrderType {
   quantify: number
@@ -10,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== 'POST') {
+  if (req.method !== "POST") {
     return res.status(405).end()
   }
 
@@ -24,6 +24,12 @@ export default async function handler(
     data: {
       payment_mode: paymentMode,
       price_amount: priceAmount,
+      code: Math.floor(Math.random() * 10000) + 1,
+      orderStatus: {
+        connect: {
+          id: "3d24157b-cc0e-4b86-bf9f-48eff2fbf409",
+        },
+      },
       user: {
         connect: {
           id: userId?.id,
