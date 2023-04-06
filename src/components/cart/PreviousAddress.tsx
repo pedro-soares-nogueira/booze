@@ -28,10 +28,7 @@ const PreviousAddressObject = z.object({
 type PreviousAddressInputs = z.infer<typeof PreviousAddressObject>
 
 const PreviousAddress = ({ setIsAdreesModelOpen }: AdreesModel) => {
-  const [allPreviousAddress, setAllPreviousAddress] = useState<
-    PreviousAddressSchema[]
-  >([])
-  const { getOrderAdrees } = useOrder()
+  const { getOrderAdrees, allPreviousAddress } = useOrder()
   const { data: session } = useSession()
   const {
     handleSubmit,
@@ -50,20 +47,6 @@ const PreviousAddress = ({ setIsAdreesModelOpen }: AdreesModel) => {
     setIsAdreesModelOpen(false)
   }
 
-  const fetchAddressByUser = async () => {
-    const userEmail = session?.user?.email
-
-    try {
-      const userAddress = await api.get(`/address/getUserAddress/${userEmail}`)
-      setAllPreviousAddress(userAddress.data.createdAddress)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    fetchAddressByUser()
-  })
   return (
     <div className="space-y-8 mt-4">
       <Controller
@@ -80,7 +63,7 @@ const PreviousAddress = ({ setIsAdreesModelOpen }: AdreesModel) => {
                 return (
                   <RadioGroup.Item
                     key={address.id}
-                    value={address.id}
+                    value={address.id!}
                     className="px-4 py-3 bg-gray-800 opacity-50 text-white rounded-md w-full aria-checked:opacity-90"
                   >
                     {address.rua}, {address.numero}

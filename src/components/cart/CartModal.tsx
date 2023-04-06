@@ -21,7 +21,7 @@ const PaymentModeType = z.object({
 type PaymentModeInputs = z.infer<typeof PaymentModeType>
 
 const CartModal = () => {
-  const { orderAdrees, createNewOrder, previousUserAdreesId } = useOrder()
+  const { orderAdrees, createNewOrder } = useOrder()
   const { deleteCart } = useCart()
   const [isAdreesModelOpen, setIsAdreesModelOpen] = useState(false)
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false)

@@ -1,7 +1,13 @@
 import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { api } from "@/lib/axios"
 import { useSession } from "next-auth/react"
-import { createContext, ReactNode, useContext, useState } from "react"
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 
 interface Order {
   adrees: AdressType
@@ -26,8 +32,7 @@ interface AdressType {
 interface OrderContext {
   orders: Order[]
   orderAdrees: AdressType | undefined
-  previousUserAdreesId: string
-  getPreviousUserAddress: (data: string) => void
+  allPreviousAddress: AdressType[]
   getOrderAdrees: (data: AdressType) => void
   createNewOrder: (data: Order) => void
 }
@@ -44,19 +49,14 @@ export function useOrder() {
 
 export function OrderProvider({ children }: OrderProviderProps) {
   const [orders, setOrders] = useLocalStorage<Order[]>("@booze/orders.01", [])
-  const [previousUserAdreesId, setPreviousUserAdreesId] = useState<string>("")
+  const [allPreviousAddress, setAllPreviousAddress] = useState<AdressType[]>([])
   const [orderAdrees, setOrderAdrees] = useState<AdressType>()
   const { data: session } = useSession()
 
-  const getPreviousUserAddress = (data: string) => {
-    setPreviousUserAdreesId(data)
-  }
-
   const getOrderAdrees = (data: AdressType) => {
+    // verificar com base no 'if (id){}'
     setOrderAdrees(data)
   }
-
-  console.log(orderAdrees)
 
   const createNewOrder = async (data: Order) => {
     const userEmail = session?.user?.email
@@ -78,15 +78,29 @@ export function OrderProvider({ children }: OrderProviderProps) {
     }
   }
 
+  const fetchAddressByUser = async () => {
+    const userEmail = session?.user?.email
+
+    try {
+      const userAddress = await api.get(`/address/getUserAddress/${userEmail}`)
+      setAllPreviousAddress(userAddress.data.createdAddress)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchAddressByUser()
+  })
+
   return (
     <OrderContext.Provider
       value={{
         orders,
         orderAdrees,
-        previousUserAdreesId,
+        allPreviousAddress,
         getOrderAdrees,
         createNewOrder,
-        getPreviousUserAddress,
       }}
     >
       {children}
