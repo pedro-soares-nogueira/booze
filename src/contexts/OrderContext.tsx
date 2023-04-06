@@ -1,11 +1,11 @@
-import { useLocalStorage } from '@/hooks/useLocalStorage'
-import { api } from '@/lib/axios'
-import { useSession } from 'next-auth/react'
-import { createContext, ReactNode, useContext, useState } from 'react'
+import { useLocalStorage } from "@/hooks/useLocalStorage"
+import { api } from "@/lib/axios"
+import { useSession } from "next-auth/react"
+import { createContext, ReactNode, useContext, useState } from "react"
 
 interface Order {
   adrees: AdressType
-  paymentMode: ['pix', 'credito', 'debito'] | string
+  paymentMode: ["pix", "credito", "debito"] | string
   products: {
     productsId: string
     quantify: number
@@ -24,6 +24,8 @@ interface AdressType {
 interface OrderContext {
   orders: Order[]
   orderAdrees: AdressType | undefined
+  previousUserAdreesId: string
+  getPreviousUserAddress: (data: string) => void
   getOrderAdrees: (data: AdressType) => void
   createNewOrder: (data: Order) => void
 }
@@ -39,9 +41,14 @@ export function useOrder() {
 }
 
 export function OrderProvider({ children }: OrderProviderProps) {
-  const [orders, setOrders] = useLocalStorage<Order[]>('@booze/orders.01', [])
+  const [orders, setOrders] = useLocalStorage<Order[]>("@booze/orders.01", [])
+  const [previousUserAdreesId, setPreviousUserAdreesId] = useState<string>("")
   const [orderAdrees, setOrderAdrees] = useState<AdressType>()
   const { data: session } = useSession()
+
+  const getPreviousUserAddress = (data: string) => {
+    setPreviousUserAdreesId(data)
+  }
 
   const getOrderAdrees = (data: AdressType) => {
     setOrderAdrees(data)
@@ -51,7 +58,7 @@ export function OrderProvider({ children }: OrderProviderProps) {
     const userEmail = session?.user?.email
 
     try {
-      await api.post('/order/create', {
+      await api.post("/order/create", {
         paymentMode: data.paymentMode,
         products: data.products.map((prod) => {
           return {
@@ -69,7 +76,14 @@ export function OrderProvider({ children }: OrderProviderProps) {
 
   return (
     <OrderContext.Provider
-      value={{ orders, getOrderAdrees, createNewOrder, orderAdrees }}
+      value={{
+        orders,
+        orderAdrees,
+        previousUserAdreesId,
+        getOrderAdrees,
+        createNewOrder,
+        getPreviousUserAddress,
+      }}
     >
       {children}
     </OrderContext.Provider>

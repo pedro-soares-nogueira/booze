@@ -7,12 +7,7 @@ import * as z from "zod"
 import { useOrder } from "@/contexts/OrderContext"
 import * as RadioGroup from "@radix-ui/react-radio-group"
 import * as Accordion from "@radix-ui/react-accordion"
-import { api } from "@/lib/axios"
-import { useSession } from "next-auth/react"
-
-interface AdreesModel {
-  setIsAdreesModelOpen: Dispatch<SetStateAction<boolean>>
-}
+import PreviousAddress from "./PreviousAddress"
 
 const AdreesType = z.object({
   cep: z.string().min(3),
@@ -20,13 +15,16 @@ const AdreesType = z.object({
   numero: z.string().min(3),
   bairro: z.string().min(3),
   complemento: z.string(),
-  chooseAddress: z.enum([]),
 })
+
 type AdreesInputs = z.infer<typeof AdreesType>
+
+interface AdreesModel {
+  setIsAdreesModelOpen: Dispatch<SetStateAction<boolean>>
+}
 
 const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
   const { getOrderAdrees, orderAdrees } = useOrder()
-  const { data: session } = useSession()
 
   const {
     handleSubmit,
@@ -48,22 +46,6 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
     getOrderAdrees(data)
     setIsAdreesModelOpen(false)
   }
-
-  const fetchAddressByUser = async () => {
-    const userEmail = session?.user?.email
-    console.log(userEmail)
-
-    try {
-      const userAddress = await api.get(`/address/getUserAddress/${userEmail}`)
-      console.log(userAddress)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    fetchAddressByUser()
-  }, [])
 
   return (
     <Dialog.Portal>
@@ -97,43 +79,9 @@ const AdressModel = ({ setIsAdreesModelOpen }: AdreesModel) => {
                   </Accordion.Trigger>
                 </Accordion.Header>
                 <Accordion.Content>
-                  <div className="space-y-8 mt-4">
-                    <Controller
-                      name="chooseAddress"
-                      control={control}
-                      render={({ field }) => {
-                        return (
-                          <RadioGroup.Root
-                            onValueChange={field.onChange}
-                            value={field.value}
-                            className="space-y-2"
-                          >
-                            <RadioGroup.Item
-                              value={"pix"}
-                              className="px-4 py-3 bg-gray-800 opacity-50 text-white rounded-md w-full aria-checked:opacity-90"
-                            >
-                              Rua Jardim Basil, 613
-                            </RadioGroup.Item>
-
-                            <RadioGroup.Item
-                              value={"credito"}
-                              className="px-4 py-3 bg-gray-800 opacity-50 text-white rounded-md w-full aria-checked:opacity-90"
-                            >
-                              Rua Aviação, 1800
-                            </RadioGroup.Item>
-                          </RadioGroup.Root>
-                        )
-                      }}
-                    />
-
-                    <button
-                      type="submit"
-                      className="py-3 px-4 mt-5 rounded-lg font-bold bg-green-700 text-white hover:bg-green-600 
-                transition-all disabled:opacity-25 w-full"
-                    >
-                      Confirmar uso de endereço
-                    </button>
-                  </div>
+                  <PreviousAddress
+                    setIsAdreesModelOpen={setIsAdreesModelOpen}
+                  />
                 </Accordion.Content>
               </Accordion.Item>
 
