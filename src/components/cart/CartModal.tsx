@@ -101,8 +101,6 @@ const CartModal = () => {
     )
   }
 
-  console.log(previousUserAdreesId)
-
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed w-screen h-screen inset-0 bg-black opacity-70" />
@@ -204,7 +202,7 @@ const CartModal = () => {
                     onOpenChange={setIsAdreesModelOpen}
                   >
                     <Dialog.Trigger asChild>
-                      {/* {orderAdrees !== undefined ? (
+                      {orderAdrees !== undefined ? (
                         <button
                           className="py-3 px-4 rounded-lg font-bold bg-green-700 text-white hover:bg-green-700 
                                     transition-all disabled:opacity-25 w-full flex items-center justify-center gap-3"
@@ -220,13 +218,7 @@ const CartModal = () => {
                           Confirmar endereço
                           <Warning size={22} />
                         </button>
-                      )} */}
-                      <button
-                        className="py-3 px-4 rounded-lg font-bold bg-gray-500 text-white hover:bg-gray-700 
-                                    transition-all disabled:opacity-25 w-full flex items-center justify-center gap-3"
-                      >
-                        Entrega
-                      </button>
+                      )}
                     </Dialog.Trigger>
 
                     <AdressModel setIsAdreesModelOpen={setIsAdreesModelOpen} />

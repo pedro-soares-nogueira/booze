@@ -14,6 +14,8 @@ interface Order {
 }
 
 interface AdressType {
+  id?: string
+  userId?: string
   cep: string
   rua: string
   numero: string
@@ -53,6 +55,8 @@ export function OrderProvider({ children }: OrderProviderProps) {
   const getOrderAdrees = (data: AdressType) => {
     setOrderAdrees(data)
   }
+
+  console.log(orderAdrees)
 
   const createNewOrder = async (data: Order) => {
     const userEmail = session?.user?.email

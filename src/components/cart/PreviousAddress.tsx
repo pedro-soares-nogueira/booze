@@ -31,7 +31,7 @@ const PreviousAddress = ({ setIsAdreesModelOpen }: AdreesModel) => {
   const [allPreviousAddress, setAllPreviousAddress] = useState<
     PreviousAddressSchema[]
   >([])
-  const { getPreviousUserAddress } = useOrder()
+  const { getOrderAdrees } = useOrder()
   const { data: session } = useSession()
   const {
     handleSubmit,
@@ -42,13 +42,11 @@ const PreviousAddress = ({ setIsAdreesModelOpen }: AdreesModel) => {
   })
 
   const usePreviousAddres = (data: PreviousAddressInputs) => {
-    getPreviousUserAddress(data.previousAddressInput)
-
     const previousAddresToOrder = allPreviousAddress.find(
       (address) => address.id === data.previousAddressInput
     )
 
-    console.log(previousAddresToOrder)
+    getOrderAdrees(previousAddresToOrder!)
     setIsAdreesModelOpen(false)
   }
 
