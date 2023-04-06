@@ -14,6 +14,33 @@ import Summary from "@/components/admin/Summary"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { Plus } from "phosphor-react"
+import { GetServerSideProps } from "next"
+import { getServerSession } from "next-auth"
+import { prisma } from "@/lib/prisma"
+import { authOptions } from "../api/auth/[...nextauth]"
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
+  if (session?.user === undefined) {
+    return {
+      redirect: {
+        destination: "/auth/login",
+        permanent: false,
+      },
+    }
+  }
+
+  const user = await prisma.user.findFirst({
+    where: {
+      email: session.user!.email,
+    },
+  })
+
+  return {
+    props: { user },
+  }
+}
 
 const Dashboard = () => {
   const { orders, loading, statusOnOrder } = useAppSelector(
